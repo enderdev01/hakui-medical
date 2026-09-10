@@ -53,13 +53,15 @@ Todo el contenido de negocio vive en `src/data/`. Para cambiar de clínica no ha
 
 ### Convención de datos pendientes
 
-Todo dato real que falta se escribe **entre corchetes**: `[Dirección de la sede]`, `[+54 11 0000-0000]`.
+Todo dato real que falta se declara en `src/data/pendiente.ts` y se muestra entre corchetes: `[Dirección de la sede]`, `[+54 11 0000-0000]`.
 
-Antes de mostrar la demostración a un cliente, búscalos:
+Para listar lo que queda por completar antes de mostrar la demostración:
 
 ```bash
-rg '\[[A-ZÁÉÍÓÚÑ][^\]]+\]' src/data
+grep -rn 'pendientes\.' src/data --include='*.ts'
 ```
+
+Se busca la referencia y no los corchetes a secas porque los corchetes aparecen también en comentarios y en prosa, y el listado se llena de ruido.
 
 ## Avisos que no se quitan sin decisión explícita
 

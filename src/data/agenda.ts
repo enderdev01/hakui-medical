@@ -1,3 +1,4 @@
+import { pendientes } from './pendiente';
 import type { Urgencia } from './tipos';
 
 /**
@@ -10,8 +11,8 @@ import type { Urgencia } from './tipos';
  */
 export const horariosPorUrgencia: Record<Urgencia, string> = {
   hoy: 'Hoy, 18:40',
-  semana: 'Jueves [00/00], 10:20',
-  flexible: 'Martes [00/00], 09:00',
+  semana: `Jueves ${pendientes.fecha}, 10:20`,
+  flexible: `Martes ${pendientes.fecha}, 09:00`,
 };
 
 /** Citas libres que anuncia el hero. Valor de escenografía. */

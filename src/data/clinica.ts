@@ -1,12 +1,11 @@
+import { pendientes } from './pendiente';
 import type { Clinica } from './tipos';
 
 /**
  * Datos de la clínica.
  *
- * CONVENCIÓN: todo lo que va [entre corchetes] es un dato real pendiente.
- * Antes de mostrar la demostración a un cliente, búscalos:
- *
- *   rg '\[[A-ZÁÉÍÓÚÑ][^\]]+\]' src/data
+ * Lo que todavía no tenemos se declara en `pendientes`, no como texto suelto:
+ * así auditarlos es `grep -rn 'pendiente(' src/data` y no hay falsos positivos.
  */
 export const clinica = {
   nombre: 'Hakui Medical',
@@ -14,11 +13,11 @@ export const clinica = {
   descripcion:
     'Clínica ambulatoria de barrio: seis especialidades, laboratorio propio y citas que se consiguen el mismo día.',
 
-  telefono: '[+54 11 0000-0000]',
+  telefono: pendientes.telefono,
   whatsapp: '5411000000000',
-  correo: '[correo@hakuimedical.com]',
-  direccion: '[Dirección de la sede]',
-  ciudad: '[Ciudad, provincia]',
+  correo: pendientes.correo,
+  direccion: pendientes.direccion,
+  ciudad: pendientes.ciudad,
 
   horarios: [
     { dias: 'Lunes a viernes', franja: '8 a 20' },
@@ -26,9 +25,9 @@ export const clinica = {
     { dias: 'Laboratorio', franja: '7 a 10' },
   ],
 
-  emergencias: '[NÚMERO DE EMERGENCIAS]',
-  direccionMedica: '[Nombre y matrícula]',
-  habilitacion: '[N° de habilitación]',
-  anio: '[AÑO]',
-  arancelesActualizados: '[MES/AÑO]',
+  emergencias: pendientes.emergencias,
+  direccionMedica: pendientes.direccionMedica,
+  habilitacion: pendientes.habilitacion,
+  anio: pendientes.anio,
+  arancelesActualizados: pendientes.arancelesActualizados,
 } satisfies Clinica;

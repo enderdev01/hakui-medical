@@ -3,6 +3,7 @@
 // adaptar la demostración a otro cliente no obligue a tocar imports.
 
 export { clinica } from './clinica';
+export { pendiente, pendientes } from './pendiente';
 export { especialidades } from './especialidades';
 export { aranceles } from './aranceles';
 export { preguntas } from './preguntas';
