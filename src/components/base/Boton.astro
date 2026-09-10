@@ -51,10 +51,17 @@ const atributosExternos = externo ? { target: '_blank', rel: 'noopener noreferre
     text-align: center;
     border: 1px solid transparent;
     border-radius: var(--r-pildora);
-    transition: filter var(--m-rapido) ease;
+    transition:
+      background var(--m-rapido) ease,
+      border-color var(--m-rapido) ease,
+      transform var(--m-rapido) var(--m-curva);
 
     &:hover:not(:disabled) {
-      filter: brightness(1.06);
+      transform: translateY(-2px);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
     }
 
     &:disabled {
@@ -80,6 +87,10 @@ const atributosExternos = externo ? { target: '_blank', rel: 'noopener noreferre
     &--primario {
       color: var(--c-texto-inverso);
       background: var(--c-acento);
+
+      &:hover:not(:disabled) {
+        background: var(--c-acento-fuerte);
+      }
     }
 
     // Acción secundaria sobre fondo claro.
@@ -87,12 +98,20 @@ const atributosExternos = externo ? { target: '_blank', rel: 'noopener noreferre
       color: var(--c-tinta);
       background: var(--c-fondo);
       border-color: var(--c-borde);
+
+      &:hover:not(:disabled) {
+        border-color: var(--c-acento);
+      }
     }
 
     // Acción principal sobre fondo oscuro: se invierte para conservar contraste.
     &--claro {
       color: var(--c-fondo-oscuro);
       background: var(--c-fondo);
+
+      &:hover:not(:disabled) {
+        background: var(--c-acento-suave);
+      }
     }
 
     // Acción secundaria sobre fondo oscuro.
@@ -100,6 +119,11 @@ const atributosExternos = externo ? { target: '_blank', rel: 'noopener noreferre
       color: var(--c-texto-inverso);
       background: transparent;
       border-color: var(--c-borde-oscuro);
+
+      &:hover:not(:disabled) {
+        background: var(--c-fondo-oscuro-alt);
+        border-color: var(--c-acento);
+      }
     }
 
     &--fantasma:focus-visible,

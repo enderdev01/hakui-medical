@@ -21,6 +21,11 @@ const respaldos = [
 ---
 
 <section class="hero" id="inicio">
+  <div class="hero__decoracion" aria-hidden="true">
+    <span class="hero__circulo hero__circulo--grande"></span>
+    <span class="hero__circulo hero__circulo--bajo"></span>
+  </div>
+
   <div class="hero__interior">
     <div class="hero__texto">
       <p class="disponibilidad">
@@ -104,12 +109,16 @@ const respaldos = [
   .hero {
     // La altura la define el contenido. Un `100vh` empuja la página fuera del
     // primer vistazo y no aporta nada.
+    position: relative;
+    overflow: hidden;
     background: var(--c-fondo-oscuro);
   }
 
   .hero__interior {
     @include contenedor;
 
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--e-8);
@@ -151,21 +160,43 @@ const respaldos = [
     position: relative;
     display: flex;
     justify-content: center;
+  }
 
-    // Halo detrás de la ilustración. Va como pseudoelemento del contenedor de
-    // la imagen y no como un SVG suelto en el hero: así no puede volver a
-    // cruzar la barra de navegación, que fue el defecto del diseño anterior.
-    &::before {
-      position: absolute;
-      inset-block-start: 50%;
-      inset-inline-start: 50%;
-      z-index: 0;
-      aspect-ratio: 1;
-      inline-size: min(115%, 560px);
-      content: '';
-      background: var(--c-fondo-oscuro-halo);
-      border-radius: var(--r-pildora);
-      translate: -50% -50%;
+  // ---------- Círculos decorativos ----------
+  // Viven dentro del bloque de contenido del hero, que empieza debajo de la
+  // cabecera, y su contenedor recorta lo que sobresale. Así no pueden volver a
+  // cruzar la barra de navegación, que fue el defecto del diseño anterior.
+  //
+  // Están descentrados a propósito: uno se sale por la derecha detrás de la
+  // ilustración y el otro asoma por abajo a la izquierda. Centrarlos los
+  // convertiría en un marco, que es justo lo que no son.
+  //
+  // El contenedor se ancla al hero, que empieza debajo de la cabecera y recorta
+  // lo que sobresale. En una versión anterior colgaban de la rejilla, que no es
+  // un contenedor posicionado: se anclaban al viewport, cruzaban la cabecera y
+  // desbordaban la página a lo ancho.
+  .hero__decoracion {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero__circulo {
+    position: absolute;
+    aspect-ratio: 1;
+    background: var(--c-fondo-oscuro-halo);
+    border-radius: var(--r-pildora);
+
+    &--grande {
+      inset-block-start: -12%;
+      inset-inline-end: -14%;
+      inline-size: min(88%, 780px);
+    }
+
+    &--bajo {
+      inset-block-end: -42%;
+      inset-inline-start: -16%;
+      inline-size: min(52%, 460px);
     }
   }
 

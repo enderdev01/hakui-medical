@@ -92,6 +92,11 @@ const datosEstructurados = {
     background: var(--c-fondo-alt);
     border: 1px solid var(--c-borde);
     border-radius: var(--r-md);
+    transition: border-color var(--m-rapido) ease;
+
+    &:hover {
+      border-color: var(--c-acento-borde);
+    }
   }
 
   .pregunta__titulo {
@@ -107,6 +112,11 @@ const datosEstructurados = {
     font-weight: var(--p-medio);
     cursor: pointer;
     list-style: none;
+    transition: color var(--m-rapido) ease;
+
+    &:hover {
+      color: var(--c-acento-fuerte);
+    }
 
     &::-webkit-details-marker {
       display: none;

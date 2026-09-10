@@ -47,12 +47,20 @@ import { testimonios } from '@data/index';
   .testimonio {
     display: flex;
     flex-direction: column;
+    transition:
+      border-color var(--m-medio) ease,
+      transform var(--m-medio) ease;
     gap: var(--e-4);
     height: 100%;
     padding: var(--e-6);
     background: var(--c-fondo);
     border: 1px solid var(--c-borde);
     border-radius: var(--r-lg);
+
+    &:hover {
+      border-color: var(--c-acento-borde);
+      transform: translateY(-3px);
+    }
   }
 
   .testimonio__comillas {

@@ -49,7 +49,11 @@ const Etiqueta = comoEnlace ? 'a' : 'span';
     letter-spacing: -0.02em;
     text-decoration: none;
 
-    &--oscuro {
+    // Cada variante conserva su color al pasar el mouse. `color: inherit` en el
+    // hover tomaba el color del body —tinta oscura— y sobre la cabecera oscura
+    // el logotipo se hundía en el fondo.
+    &--oscuro,
+    &--oscuro:hover {
       color: var(--c-tinta);
 
       .marca__suave {
@@ -57,20 +61,27 @@ const Etiqueta = comoEnlace ? 'a' : 'span';
       }
     }
 
-    &--claro {
+    &--claro,
+    &--claro:hover {
       color: var(--c-texto-inverso);
 
       .marca__suave {
         color: var(--c-texto-inverso-marca);
       }
-
-      &:focus-visible {
-        outline-color: var(--c-fondo);
-      }
     }
 
-    &:hover {
-      color: inherit;
+    &--claro:focus-visible {
+      outline-color: var(--c-fondo);
+    }
+
+    // La única señal de que es interactivo: el signo se agranda un poco.
+    // El color no se toca.
+    .marca__signo {
+      transition: transform var(--m-rapido) var(--m-curva);
+    }
+
+    &:hover .marca__signo {
+      transform: scale(1.06);
     }
   }
 

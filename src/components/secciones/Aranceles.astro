@@ -73,6 +73,12 @@ const columnas = [
     align-items: center;
     justify-content: space-between;
     padding: var(--e-4) var(--e-5);
+    border-radius: var(--r-sm);
+    transition: background var(--m-rapido) ease;
+
+    &:hover {
+      background: var(--c-fondo-alt);
+    }
 
     & + & {
       border-block-start: 1px solid var(--c-borde-suave);
