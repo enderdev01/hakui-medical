@@ -46,7 +46,7 @@ export const especialidades = [
   {
     id: 'gastro',
     nombre: 'Gastroenterología',
-    nombreCorto: 'Gastroenterología',
+    nombreCorto: 'Gastro',
     descripcion: 'Acidez, dolor abdominal, reflujo, colon irritable y estudios digestivos.',
     icono: 'estomago',
     desde: 34600,

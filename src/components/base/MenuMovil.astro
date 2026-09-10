@@ -1,0 +1,350 @@
+---
+import AvisoUrgencias from './AvisoUrgencias.astro';
+import Icono from './Icono.astro';
+import Marca from './Marca.astro';
+import { clinica, especialidades, tramites } from '@data/index';
+import { enlaceWhatsapp, mensajesWhatsapp } from '@lib/formato';
+
+// Se usa `<dialog>` con `showModal()`: trae atrapado de foco, cierre con Escape
+// e inertización del fondo sin escribir nada de eso a mano.
+//
+// Fondo claro y no oscuro: en el menú de una clínica la legibilidad pesa más
+// que el efecto, y el aviso de urgencias tiene que leerse de un vistazo.
+
+const whatsapp = enlaceWhatsapp(clinica.whatsapp, mensajesWhatsapp.general);
+---
+
+<button
+  class="abrir"
+  type="button"
+  data-menu-abrir
+  aria-expanded="false"
+  aria-controls="menu-movil"
+>
+  <Icono nombre="menu" tamano={20} />
+  <span>Menú</span>
+</button>
+
+<dialog class="menu" id="menu-movil" aria-label="Menú de navegación">
+  <div class="menu__cabecera">
+    <Marca tamano={32} comoEnlace={false} />
+    <button class="menu__cerrar" type="button" data-menu-cerrar>
+      <Icono nombre="cerrar" tamano={18} />
+      <span>Cerrar</span>
+    </button>
+  </div>
+
+  <div class="menu__cuerpo">
+    <a class="principal" href="#asistente" data-menu-navegar>
+      <span class="principal__texto">
+        <span class="principal__titulo">Agendar una cita</span>
+        <span class="principal__detalle">Describe tus síntomas y te orientamos</span>
+      </span>
+      <Icono nombre="flecha" tamano={22} />
+    </a>
+
+    <section class="grupo">
+      <h2 class="grupo__titulo">Especialidades</h2>
+      <ul class="especialidades">
+        {especialidades.map((especialidad) => (
+          <li>
+            <a class="especialidades__enlace" href="#especialidades" data-menu-navegar>
+              <Icono nombre={especialidad.icono} tamano={20} />
+              {especialidad.nombreCorto}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="grupo">
+      <h2 class="grupo__titulo">Pacientes</h2>
+      <ul class="tramites">
+        {tramites.map((tramite) => (
+          <li>
+            <a class="tramites__enlace" href={tramite.ancla} data-menu-navegar>
+              <span>{tramite.texto}</span>
+              <Icono nombre="flecha" tamano={18} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <div class="menu__pie">
+    <AvisoUrgencias corto />
+    <div class="contacto">
+      <a class="contacto__accion" href={`tel:${clinica.telefono}`}>
+        <Icono nombre="telefono" tamano={18} />
+        Llamar
+      </a>
+      <a class="contacto__accion" href={whatsapp} target="_blank" rel="noopener noreferrer">
+        <Icono nombre="whatsapp" tamano={18} />
+        WhatsApp
+      </a>
+    </div>
+    <p class="contacto__horario">Lunes a viernes 8 a 20 · Sábados 8 a 13 · {clinica.direccion}</p>
+  </div>
+</dialog>
+
+<script>
+  const dialogo = document.querySelector<HTMLDialogElement>('#menu-movil');
+  const abrir = document.querySelector<HTMLButtonElement>('[data-menu-abrir]');
+  const cerrar = document.querySelector<HTMLButtonElement>('[data-menu-cerrar]');
+
+  if (dialogo && abrir && cerrar) {
+    // `aria-expanded` se deriva del atributo `open` en lugar de escribirse en
+    // cada camino de cierre. Escape, el botón y un enlace cierran el diálogo de
+    // formas distintas, y el evento `close` no se dispara de forma fiable en
+    // todos los entornos: si se pierde uno, el botón mentiría sobre su estado.
+    new MutationObserver(() => {
+      abrir.setAttribute('aria-expanded', String(dialogo.open));
+    }).observe(dialogo, { attributes: true, attributeFilter: ['open'] });
+
+    abrir.addEventListener('click', () => {
+      const mostrar = () => dialogo.showModal();
+      // `startViewTransition` donde exista; donde no, el diálogo se abre igual
+      // y la animación de opacidad del CSS hace de respaldo.
+      if (document.startViewTransition) {
+        document.startViewTransition(mostrar);
+      } else {
+        mostrar();
+      }
+    });
+
+    cerrar.addEventListener('click', () => dialogo.close());
+
+    // Un enlace dentro de un diálogo modal no cierra nada por su cuenta: el
+    // ancla saltaría detrás del menú abierto.
+    dialogo.querySelectorAll('[data-menu-navegar]').forEach((enlace) => {
+      enlace.addEventListener('click', () => dialogo.close());
+    });
+  }
+</script>
+
+<style lang="scss">
+  .abrir {
+    @include toque;
+    @include foco;
+
+    display: flex;
+    gap: var(--e-2);
+    align-items: center;
+    padding-inline: var(--e-4);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-texto-inverso);
+    background: var(--c-fondo-oscuro-alt);
+    border: 1px solid var(--c-borde-oscuro);
+    border-radius: var(--r-sm);
+
+    &:focus-visible {
+      outline-color: var(--c-fondo);
+    }
+
+    @include desde('lg') {
+      display: none;
+    }
+  }
+
+  .menu {
+    display: none;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100%;
+    max-block-size: 100%;
+    padding: 0;
+    color: var(--c-tinta);
+    background: var(--c-fondo);
+    border: none;
+
+    &[open] {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    &::backdrop {
+      background: var(--c-fondo);
+    }
+
+    // Respaldo donde no haya transiciones de vista.
+    animation: aparecer var(--m-medio) var(--m-curva);
+  }
+
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  .menu__cabecera {
+    display: flex;
+    gap: var(--e-4);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--e-3) var(--e-5);
+    border-block-end: 1px solid var(--c-borde-suave);
+  }
+
+  .menu__cerrar {
+    @include toque;
+    @include foco;
+
+    display: flex;
+    gap: var(--e-2);
+    align-items: center;
+    padding-inline: var(--e-4);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-sm);
+  }
+
+  .menu__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-6);
+    padding: var(--e-5);
+    overflow-y: auto;
+  }
+
+  .principal {
+    @include foco;
+
+    display: flex;
+    gap: var(--e-4);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--e-5);
+    color: var(--c-texto-inverso);
+    background: var(--c-acento);
+    border-radius: var(--r-lg);
+
+    &:hover {
+      color: var(--c-texto-inverso);
+    }
+  }
+
+  .principal__texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-05);
+  }
+
+  .principal__titulo {
+    font-family: var(--f-titulo);
+    font-size: var(--t-h4);
+    font-weight: var(--p-fuerte);
+  }
+
+  .principal__detalle {
+    font-size: var(--t-xs);
+    color: var(--c-acento-borde);
+  }
+
+  .grupo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+  }
+
+  .grupo__titulo {
+    font-family: var(--f-texto);
+    font-size: var(--t-xs);
+    font-weight: var(--p-medio);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-texto-debil);
+  }
+
+  .especialidades {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--e-2);
+  }
+
+  .especialidades__enlace {
+    @include toque;
+    @include foco;
+
+    // Red de seguridad: al adaptar la demostración a otro cliente puede
+    // aparecer un nombre más largo que el ancho de la columna.
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
+    display: flex;
+    gap: var(--e-3);
+    align-items: center;
+    padding: var(--e-3);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-tinta);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-sm);
+  }
+
+  .tramites {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tramites__enlace {
+    @include toque;
+    @include foco;
+
+    display: flex;
+    gap: var(--e-4);
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--t-base);
+    font-weight: var(--p-medio);
+    color: var(--c-tinta);
+    border-block-end: 1px solid var(--c-borde-suave);
+  }
+
+  .menu__pie {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    padding: var(--e-4) var(--e-5) var(--e-6);
+    border-block-start: 1px solid var(--c-borde-suave);
+  }
+
+  .contacto {
+    display: flex;
+    gap: var(--e-2);
+  }
+
+  .contacto__accion {
+    @include toque;
+    @include foco;
+
+    display: flex;
+    flex: 1;
+    gap: var(--e-2);
+    align-items: center;
+    justify-content: center;
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-tinta);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-pildora);
+  }
+
+  .contacto__horario {
+    font-size: var(--t-xs);
+    line-height: var(--i-base);
+    color: var(--c-texto-debil);
+  }
+
+  @include movimiento-reducido {
+    .menu {
+      animation: none;
+    }
+  }
+</style>

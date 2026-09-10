@@ -14,6 +14,18 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+
+  // Reserva el espacio de la barra de desplazamiento siempre, para que la
+  // página no salte al abrir el menú móvil.
+  scrollbar-gutter: stable;
+}
+
+// El bloqueo del fondo se deriva del estado real del diálogo, no de un evento.
+// El evento `close` no se dispara de forma fiable en todos los entornos, y si
+// se pierde, la página queda sin poder desplazarse: un fallo que el visitante
+// no puede resolver más que recargando.
+body:has(dialog[open]) {
+  overflow: hidden;
 }
 
 // El desplazamiento suave es una comodidad, no un requisito: se apaga con la
