@@ -61,6 +61,8 @@ import { testimonios } from '@data/index';
   }
 
   .testimonio__cita {
+    @include texto-lectura;
+
     // Empuja el pie de la tarjeta hacia abajo para que los nombres queden
     // alineados aunque las citas tengan distinto largo.
     flex-grow: 1;

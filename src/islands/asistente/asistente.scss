@@ -418,7 +418,9 @@
 
 .resultado__urgencias {
   margin-block-start: auto;
-  font-size: var(--t-xs);
+
+  // Información de seguridad: no puede ser el texto más chico de la página.
+  font-size: var(--t-sm);
   line-height: var(--i-base);
   color: var(--c-texto-debil);
 }
