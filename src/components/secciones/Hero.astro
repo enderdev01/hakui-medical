@@ -1,0 +1,324 @@
+---
+import { Picture } from 'astro:assets';
+import profesional from '@assets/profesional.png';
+import Boton from '@components/base/Boton.astro';
+import Icono from '@components/base/Icono.astro';
+import { citasLibresHoy, especialidades, horariosPorUrgencia } from '@data/index';
+
+// La ilustración es RGBA con transparencia real y se sirve tal cual, sobre el
+// fondo oscuro. NO se usa `mix-blend-mode`: en una versión anterior del diseño
+// se aplastó el canal alfa contra negro al procesar la imagen y el blend
+// existía para compensar un problema que la imagen no tenía.
+//
+// `Picture` genera AVIF y WebP con respaldo PNG y escribe las dimensiones, que
+// es lo que evita el salto de diseño al cargar.
+
+const respaldos = [
+  { valor: String(especialidades.length), etiqueta: 'especialidades' },
+  { valor: '1', etiqueta: 'sola sede' },
+  { valor: '48 h', etiqueta: 'resultados de laboratorio' },
+];
+---
+
+<section class="hero" id="inicio">
+  <div class="hero__interior">
+    <div class="hero__texto">
+      <p class="disponibilidad">
+        <span class="disponibilidad__punto" aria-hidden="true"></span>
+        {citasLibresHoy} citas disponibles hoy
+      </p>
+
+      <h1 class="hero__titular">Describe lo que sientes y te decimos a qué consulta ir.</h1>
+
+      <p class="hero__entrada">
+        Nuestro asistente lee tus síntomas en lenguaje común y te sugiere la especialidad, el
+        horario más cercano y el valor de la consulta.
+      </p>
+
+      <div class="hero__acciones">
+        <Boton href="#asistente" tamano="lg">
+          Describir mis síntomas
+        </Boton>
+        <Boton href="#aranceles" variante="fantasma" tamano="lg">
+          Ver aranceles
+        </Boton>
+      </div>
+
+      <dl class="respaldos">
+        {respaldos.map((dato) => (
+          <div class="respaldos__dato">
+            <dt class="respaldos__valor">{dato.valor}</dt>
+            <dd class="respaldos__etiqueta">{dato.etiqueta}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="hero__ilustracion">
+      <Picture
+        src={profesional}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960]}
+        sizes="(min-width: 1024px) 620px, 90vw"
+        alt="Ilustración de un profesional de la clínica con una tarjeta de resultados y un gráfico de signos vitales"
+        loading="eager"
+        fetchpriority="high"
+        class="hero__imagen"
+      />
+
+      <!-- Las tarjetas se posicionan contra el contenedor de la ilustración, no
+           contra el hero: así no invaden la columna de texto en ningún ancho. -->
+      <div class="tarjeta tarjeta--cita">
+        <Icono nombre="calendario" tamano={26} class="tarjeta__icono" />
+        <span class="tarjeta__cuerpo">
+          <span class="tarjeta__etiqueta">Tu cita sugerida</span>
+          <span class="tarjeta__valor">{horariosPorUrgencia.hoy}</span>
+        </span>
+      </div>
+
+      <div class="tarjeta tarjeta--vitales">
+        <span class="tarjeta__etiqueta">Signos vitales</span>
+        <svg
+          class="pulso"
+          width="132"
+          height="36"
+          viewBox="0 0 150 42"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            class="pulso__trazo"
+            d="M4 24h22l9-16 11 30 9-20 7 8h14l9-12 10 22 8-14h22"
+            stroke="var(--c-celeste)"
+            stroke-width="3.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .hero {
+    // La altura la define el contenido. Un `100vh` empuja la página fuera del
+    // primer vistazo y no aporta nada.
+    background: var(--c-fondo-oscuro);
+  }
+
+  .hero__interior {
+    @include contenedor;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-8);
+    align-items: center;
+    padding-block: var(--e-10) var(--e-12);
+
+    @include desde('lg') {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--e-12);
+    }
+  }
+
+  .hero__texto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--e-6);
+  }
+
+  .hero__titular {
+    max-width: 16ch;
+    color: var(--c-texto-inverso);
+  }
+
+  .hero__entrada {
+    max-width: 46ch;
+    font-size: var(--t-lead);
+    line-height: var(--i-base);
+    color: var(--c-texto-inverso-tenue);
+  }
+
+  .hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+
+  .hero__ilustracion {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero__imagen {
+    width: 100%;
+    max-width: 620px;
+    height: auto;
+  }
+
+  // ---------- Indicador de disponibilidad ----------
+  // El estado se comunica con texto. El punto es refuerzo visual, no el mensaje:
+  // quien no distingue el color tiene que entenderlo igual.
+  .disponibilidad {
+    display: flex;
+    gap: var(--e-3);
+    align-items: center;
+    padding: var(--e-2) var(--e-4);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-acento-borde);
+    background: var(--c-fondo-oscuro-alt);
+    border: 1px solid var(--c-borde-oscuro);
+    border-radius: var(--r-pildora);
+  }
+
+  .disponibilidad__punto {
+    position: relative;
+    inline-size: 8px;
+    block-size: 8px;
+    background: var(--c-celeste);
+    border-radius: var(--r-pildora);
+
+    &::after {
+      position: absolute;
+      inset: -5px;
+      content: '';
+      background: var(--c-celeste);
+      border-radius: var(--r-pildora);
+      animation: latido 3.4s ease-out infinite;
+    }
+  }
+
+  @keyframes latido {
+    0% {
+      opacity: 0.45;
+      transform: scale(0.85);
+    }
+
+    70% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  // ---------- Datos de respaldo ----------
+  .respaldos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-6);
+    margin: 0;
+  }
+
+  .respaldos__dato {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-1);
+  }
+
+  .respaldos__valor {
+    font-family: var(--f-titulo);
+    font-size: 1.625rem;
+    font-weight: var(--p-fuerte);
+    color: var(--c-texto-inverso);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .respaldos__etiqueta {
+    margin: 0;
+    font-size: var(--t-sm);
+    color: var(--c-texto-inverso-debil);
+  }
+
+  // ---------- Tarjetas flotantes ----------
+  .tarjeta {
+    position: absolute;
+    display: flex;
+    padding: var(--e-4) var(--e-5);
+    background: var(--c-fondo);
+    border-radius: var(--r-md);
+    box-shadow: var(--s-flotante);
+    animation: flotar 7s ease-in-out infinite;
+  }
+
+  .tarjeta--cita {
+    inset-block-start: 8%;
+    inset-inline-start: 0;
+    gap: var(--e-3);
+    align-items: center;
+  }
+
+  .tarjeta--vitales {
+    inset-block-end: 14%;
+    inset-inline-end: 0;
+    flex-direction: column;
+    gap: var(--e-2);
+    animation-delay: -3s;
+  }
+
+  .tarjeta__icono {
+    color: var(--c-acento);
+  }
+
+  .tarjeta__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tarjeta__etiqueta {
+    font-size: var(--t-xs);
+    color: var(--c-texto-tenue);
+  }
+
+  .tarjeta__valor {
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+  }
+
+  @keyframes flotar {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .pulso__trazo {
+    stroke-dasharray: 420;
+    stroke-dashoffset: 420;
+    animation: trazar 3.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes trazar {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  // Con movimiento reducido todo queda en su estado de reposo visible: el
+  // electro dibujado entero, las tarjetas quietas, el punto sin latido.
+  @include movimiento-reducido {
+    .tarjeta {
+      animation: none;
+    }
+
+    .disponibilidad__punto::after {
+      display: none;
+    }
+
+    .pulso__trazo {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+  }
+</style>

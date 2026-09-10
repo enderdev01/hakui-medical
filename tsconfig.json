@@ -14,7 +14,8 @@
       "@layouts/*": ["./src/layouts/*"],
       "@islands/*": ["./src/islands/*"],
       "@data/*": ["./src/data/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@assets/*": ["./src/assets/*"]
     },
     "types": ["node"]
   }

@@ -1,4 +1,5 @@
 ---
+import Hero from '@components/secciones/Hero.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { clinica } from '@data/index';
 ---
@@ -7,14 +8,5 @@ import { clinica } from '@data/index';
   titulo={`${clinica.nombre} — describe lo que sientes y te decimos a qué consulta ir`}
   descripcion="Clínica ambulatoria con seis especialidades, laboratorio propio y un asistente que traduce tus síntomas en una cita concreta."
 >
-  <p class="marcador">Las secciones de la landing llegan a partir de ONI-16.</p>
+  <Hero />
 </BaseLayout>
-
-<style lang="scss">
-  .marcador {
-    @include contenedor;
-    @include seccion;
-
-    color: var(--c-texto-tenue);
-  }
-</style>
