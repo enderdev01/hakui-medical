@@ -338,7 +338,7 @@
 .opciones__cuerpo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--e-05);
 }
 
 .opciones__nombre {
@@ -387,7 +387,7 @@
 .resultado__titulo {
   padding-block: var(--e-1);
   font-family: var(--f-titulo);
-  font-size: 1.625rem;
+  font-size: var(--t-cifra-md);
   font-weight: var(--p-fuerte);
   color: var(--c-tinta);
 }
@@ -474,7 +474,7 @@
 
 .valor__precio {
   font-family: var(--f-titulo);
-  font-size: 1.75rem;
+  font-size: var(--t-cifra-lg);
   font-weight: var(--p-fuerte);
   color: var(--c-acento-fuerte);
   font-variant-numeric: tabular-nums;
@@ -568,7 +568,7 @@
 .reservada__cuerpo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--e-05);
 }
 
 .reservada__titulo {
