@@ -1,0 +1,126 @@
+---
+import Boton from '@components/base/Boton.astro';
+import EncabezadoSeccion from '@components/base/EncabezadoSeccion.astro';
+import Seccion from '@components/base/Seccion.astro';
+import { aranceles, clinica } from '@data/index';
+import { precio } from '@lib/formato';
+
+// Dos columnas en escritorio, una sola lista en móvil. El reparto está en los
+// datos para no decidirlo con `nth-child`, que se rompe al agregar una práctica.
+const columnas = [
+  aranceles.filter((arancel) => arancel.columna === 1),
+  aranceles.filter((arancel) => arancel.columna === 2),
+];
+---
+
+<Seccion id="aranceles" fondo="neutro">
+  <EncabezadoSeccion
+    eyebrow="Aranceles"
+    titulo="Los precios, antes de que preguntes"
+    entrada="Valores particulares de referencia. Con cobertura básica, la mayoría de las consultas queda sin costo o con copago."
+  />
+
+  <div class="aranceles__columnas">
+    {columnas.map((columna) => (
+      <ul class="lista">
+        {columna.map((arancel) => (
+          <li class="lista__fila">
+            <span class="lista__practica">
+              <span class="lista__nombre">{arancel.practica}</span>
+              <span class="lista__detalle">{arancel.detalle}</span>
+            </span>
+            <span class="lista__precio">{precio(arancel.precio)}</span>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+
+  <div class="coberturas">
+    <p class="coberturas__texto">
+      Valores actualizados a {clinica.arancelesActualizados}. Trabajamos con coberturas básicas:
+      lleva tu credencial y la orden, y en recepción te decimos qué cubre tu plan antes de pasar al
+      consultorio.
+    </p>
+    <Boton href="#asistente">Consultar mi cobertura</Boton>
+  </div>
+</Seccion>
+
+<style lang="scss">
+  .aranceles__columnas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-4);
+    padding-block-start: var(--e-8);
+
+    @include desde('lg') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .lista {
+    display: flex;
+    flex-direction: column;
+    padding: var(--e-2);
+    background: var(--c-fondo);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-lg);
+  }
+
+  .lista__fila {
+    display: flex;
+    gap: var(--e-5);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--e-4) var(--e-5);
+
+    & + & {
+      border-block-start: 1px solid var(--c-borde-suave);
+    }
+  }
+
+  .lista__practica {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .lista__nombre {
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+  }
+
+  .lista__detalle {
+    font-size: var(--t-xs);
+    color: var(--c-texto-tenue);
+  }
+
+  .lista__precio {
+    font-family: var(--f-titulo);
+    font-size: 1.25rem;
+    font-weight: var(--p-fuerte);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .coberturas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-5);
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: var(--e-4);
+    padding: var(--e-5) var(--e-6);
+    background: var(--c-fondo);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-md);
+  }
+
+  .coberturas__texto {
+    @include texto-lectura;
+
+    flex: 1 1 32ch;
+    font-size: var(--t-sm);
+    color: var(--c-texto);
+  }
+</style>
