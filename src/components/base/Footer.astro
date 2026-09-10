@@ -1,0 +1,270 @@
+---
+import AvisoUrgencias from './AvisoUrgencias.astro';
+import Icono from './Icono.astro';
+import Marca from './Marca.astro';
+import { clinica, especialidades, tramites } from '@data/index';
+---
+
+<footer class="pie" id="contacto">
+  <div class="pie__interior">
+    <div class="pie__columnas">
+      <div class="pie__marca">
+        <Marca tamano={34} />
+        <p class="pie__descripcion">{clinica.descripcion}</p>
+        <ul class="pie__redes">
+          <li>
+            <a class="pie__red" href="#" aria-label="Instagram de la clínica">
+              <Icono nombre="instagram" tamano={18} />
+            </a>
+          </li>
+          <li>
+            <a class="pie__red" href="#" aria-label="Teléfono de la clínica">
+              <Icono nombre="telefono" tamano={18} />
+            </a>
+          </li>
+          <li>
+            <a class="pie__red" href="#" aria-label="WhatsApp de la clínica">
+              <Icono nombre="whatsapp" tamano={18} />
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <nav class="pie__columna" aria-labelledby="pie-atencion">
+        <h2 class="pie__titulo" id="pie-atencion">
+          Atención
+        </h2>
+        <ul class="pie__lista">
+          {especialidades.map((especialidad) => (
+            <li>
+              <a class="pie__enlace" href="#especialidades">
+                {especialidad.nombre}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="pie__columna" aria-labelledby="pie-pacientes">
+        <h2 class="pie__titulo" id="pie-pacientes">
+          Pacientes
+        </h2>
+        <ul class="pie__lista">
+          {tramites.map((tramite) => (
+            <li>
+              <a class="pie__enlace" href={tramite.ancla}>
+                {tramite.texto}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="pie__columna">
+        <h2 class="pie__titulo">Dónde estamos</h2>
+        <address class="pie__direccion">
+          <span>{clinica.direccion}</span>
+          <span>{clinica.ciudad}</span>
+          <a class="pie__enlace pie__enlace--fuerte" href={`tel:${clinica.telefono}`}>
+            {clinica.telefono}
+          </a>
+          <a class="pie__enlace" href={`mailto:${clinica.correo}`}>
+            {clinica.correo}
+          </a>
+        </address>
+
+        <div class="pie__horarios">
+          <h3 class="pie__titulo">Horarios</h3>
+          <dl class="pie__tabla">
+            {clinica.horarios.map((horario) => (
+              <div class="pie__fila">
+                <dt>{horario.dias}</dt>
+                <dd>{horario.franja}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <AvisoUrgencias class="pie__urgencias" />
+
+    <div class="pie__legal">
+      <span>
+        © {clinica.anio} {clinica.nombre}. Dirección médica: {clinica.direccionMedica}.
+      </span>
+      <span class="pie__legal-enlaces">
+        <a class="pie__enlace" href="#">
+          Términos
+        </a>
+        <a class="pie__enlace" href="#">
+          Privacidad
+        </a>
+        <span>Habilitación {clinica.habilitacion}</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  .pie {
+    background: var(--c-fondo-alt);
+    border-block-start: 1px solid var(--c-borde);
+  }
+
+  .pie__interior {
+    @include contenedor;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-8);
+    padding-block: var(--e-12) var(--e-10);
+  }
+
+  .pie__columnas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-8);
+
+    @include desde('md') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include desde('lg') {
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    }
+  }
+
+  .pie__marca {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+    align-items: flex-start;
+  }
+
+  .pie__descripcion {
+    max-width: 34ch;
+    font-size: var(--t-sm);
+    line-height: var(--i-base);
+    color: var(--c-texto-tenue);
+  }
+
+  .pie__redes {
+    display: flex;
+    gap: var(--e-2);
+  }
+
+  .pie__red {
+    @include foco;
+
+    display: grid;
+    place-items: center;
+    inline-size: var(--toque-min);
+    block-size: var(--toque-min);
+    color: var(--c-texto);
+    background: var(--c-fondo);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-sm);
+    transition: border-color var(--m-rapido) ease;
+
+    &:hover {
+      border-color: var(--c-acento-borde);
+    }
+  }
+
+  .pie__columna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+  }
+
+  .pie__titulo {
+    font-family: var(--f-texto);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    letter-spacing: 0;
+    color: var(--c-tinta);
+  }
+
+  .pie__lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+  }
+
+  .pie__enlace {
+    @include foco;
+
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    font-size: var(--t-sm);
+    color: var(--c-texto-tenue);
+
+    &:hover {
+      color: var(--c-acento-fuerte);
+    }
+
+    &--fuerte {
+      font-weight: var(--p-medio);
+      color: var(--c-tinta);
+    }
+  }
+
+  .pie__direccion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-1);
+    font-size: var(--t-sm);
+    font-style: normal;
+    color: var(--c-texto-tenue);
+  }
+
+  .pie__horarios {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    padding: var(--e-4) var(--e-5);
+    background: var(--c-fondo);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-md);
+  }
+
+  .pie__tabla {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+    margin: 0;
+  }
+
+  .pie__fila {
+    display: flex;
+    gap: var(--e-4);
+    justify-content: space-between;
+    font-size: var(--t-sm);
+    color: var(--c-texto-tenue);
+
+    dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .pie__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-4);
+    justify-content: space-between;
+    padding-block-start: var(--e-6);
+    font-size: var(--t-xs);
+    color: var(--c-texto-debil);
+    border-block-start: 1px solid var(--c-borde);
+  }
+
+  .pie__legal-enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-5);
+    align-items: center;
+  }
+</style>

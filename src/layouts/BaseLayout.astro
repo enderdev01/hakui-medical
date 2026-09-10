@@ -1,0 +1,83 @@
+---
+import Footer from '@components/base/Footer.astro';
+import Header from '@components/base/Header.astro';
+import { clinica, especialidades } from '@data/index';
+import '@styles/global.scss';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  /** Ruta de la imagen social, relativa a la raíz del sitio. */
+  imagenSocial?: string;
+}
+
+const { titulo, descripcion, imagenSocial = '/img/social.png' } = Astro.props;
+
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const social = new URL(imagenSocial, Astro.site);
+
+// Datos estructurados de clínica médica. Salen de los mismos módulos que la
+// página visible, así no pueden contradecirla. Se completa en ONI-37.
+const datosEstructurados = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: clinica.nombre,
+  description: clinica.descripcion,
+  telephone: clinica.telefono,
+  email: clinica.correo,
+  url: canonica.href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: clinica.direccion,
+    addressLocality: clinica.ciudad,
+  },
+  availableService: especialidades.map((especialidad) => ({
+    '@type': 'MedicalProcedure',
+    name: especialidad.nombre,
+    description: especialidad.descripcion,
+  })),
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonica.href} />
+
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica.href} />
+    <meta property="og:image" content={social.href} />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Las fuentes se sirven desde el propio dominio con ruta estable, que es
+         lo que permite precargarlas. Sin precarga el texto salta al cargar. -->
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(datosEstructurados)}
+    ></script>
+  </head>
+
+  <body>
+    <a class="salto-contenido" href="#contenido">
+      Saltar al contenido
+    </a>
+    <Header />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

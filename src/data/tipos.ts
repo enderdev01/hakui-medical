@@ -16,6 +16,7 @@ export type Icono =
   | 'matraz'
   | 'calendario'
   | 'chispa'
+  | 'instagram'
   | 'alerta'
   | 'telefono'
   | 'whatsapp'

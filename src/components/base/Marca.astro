@@ -1,0 +1,83 @@
+---
+import { clinica } from '@data/index';
+
+interface Props {
+  /** En el hero la marca va sobre fondo oscuro. */
+  tono?: 'claro' | 'oscuro';
+  tamano?: number;
+  /** Marca la unidad como encabezado principal cuando corresponde. */
+  comoEnlace?: boolean;
+}
+
+const { tono = 'oscuro', tamano = 36, comoEnlace = true } = Astro.props;
+const Etiqueta = comoEnlace ? 'a' : 'span';
+---
+
+<Etiqueta class:list={['marca', `marca--${tono}`]} href={comoEnlace ? '#inicio' : undefined}>
+  <svg
+    class="marca__signo"
+    width={tamano}
+    height={tamano}
+    viewBox="0 0 38 38"
+    fill="none"
+    aria-hidden="true"
+  >
+    <rect x="1" y="1" width="36" height="36" rx="12" fill="var(--c-acento)"></rect>
+    <path
+      d="M13 11v16M25 11v16M13 19h12"
+      stroke="var(--c-fondo)"
+      stroke-width="3.4"
+      stroke-linecap="round"
+    ></path>
+  </svg>
+  <span class="marca__texto">
+    {clinica.marca.fuerte} <span class="marca__suave">{clinica.marca.suave}</span>
+  </span>
+</Etiqueta>
+
+<style lang="scss">
+  .marca {
+    @include foco;
+
+    display: inline-flex;
+    gap: var(--e-3);
+    align-items: center;
+    font-family: var(--f-titulo);
+    font-size: 1.25rem;
+    font-weight: var(--p-fuerte);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+
+    &--oscuro {
+      color: var(--c-tinta);
+
+      .marca__suave {
+        color: var(--c-texto-tenue);
+      }
+    }
+
+    &--claro {
+      color: var(--c-texto-inverso);
+
+      .marca__suave {
+        color: var(--c-texto-inverso-marca);
+      }
+
+      &:focus-visible {
+        outline-color: var(--c-fondo);
+      }
+    }
+
+    &:hover {
+      color: inherit;
+    }
+  }
+
+  .marca__signo {
+    flex-shrink: 0;
+  }
+
+  .marca__suave {
+    font-weight: var(--p-semi);
+  }
+</style>

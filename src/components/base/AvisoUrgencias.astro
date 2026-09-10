@@ -1,0 +1,43 @@
+---
+import Icono from './Icono.astro';
+import { clinica } from '@data/index';
+
+interface Props {
+  /** La versión corta va en el menú móvil, donde el espacio es escaso. */
+  corto?: boolean;
+  class?: string;
+}
+
+const { corto = false, class: clase } = Astro.props;
+
+// El aviso no depende del color para comunicarse: lleva icono y texto explícito.
+// Alguien con daltonismo o mirando la pantalla al sol tiene que entenderlo igual.
+const texto = corto
+  ? `No somos guardia. Ante una urgencia llama al ${clinica.emergencias}.`
+  : `No atendemos urgencias ni guardia. Ante una emergencia, llama al ${clinica.emergencias} o acude al hospital más cercano.`;
+---
+
+<p class:list={['aviso', clase]} role="note">
+  <Icono nombre="alerta" tamano={20} class="aviso__icono" />
+  <span>{texto}</span>
+</p>
+
+<style lang="scss">
+  .aviso {
+    display: flex;
+    gap: var(--e-3);
+    align-items: flex-start;
+    padding: var(--e-4) var(--e-5);
+    font-size: var(--t-sm);
+    line-height: var(--i-base);
+    color: var(--c-alerta-texto);
+    background: var(--c-alerta-fondo);
+    border: 1px solid var(--c-alerta-borde);
+    border-radius: var(--r-md);
+  }
+
+  .aviso__icono {
+    color: var(--c-alerta-icono);
+    margin-block-start: 2px;
+  }
+</style>

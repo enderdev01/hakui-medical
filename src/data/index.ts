@@ -10,4 +10,5 @@ export { preguntas } from './preguntas';
 export { testimonios } from './testimonios';
 export { proceso, valores } from './proceso';
 export { horariosPorUrgencia, citasLibresHoy } from './agenda';
+export { navegacion, tramites } from './navegacion';
 export type * from './tipos';

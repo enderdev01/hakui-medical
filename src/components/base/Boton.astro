@@ -1,0 +1,110 @@
+---
+// Botón del sitio. Renderiza `<a>` cuando recibe `href` y `<button>` cuando no:
+// un enlace que navega no debe ser un botón, aunque se vea igual.
+
+interface Props {
+  variante?: 'primario' | 'secundario' | 'claro' | 'fantasma';
+  tamano?: 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  /** Abre en pestaña nueva con las medidas de seguridad correspondientes. */
+  externo?: boolean;
+  ancho?: boolean;
+  class?: string;
+}
+
+const {
+  variante = 'primario',
+  tamano = 'md',
+  href,
+  type = 'button',
+  externo = false,
+  ancho = false,
+  class: clase,
+} = Astro.props;
+
+const Etiqueta = href ? 'a' : 'button';
+const atributosExternos = externo ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<Etiqueta
+  class:list={['boton', `boton--${variante}`, `boton--${tamano}`, { 'boton--ancho': ancho }, clase]}
+  href={href}
+  type={href ? undefined : type}
+  {...atributosExternos}
+>
+  <slot />
+</Etiqueta>
+
+<style lang="scss">
+  .boton {
+    @include toque;
+    @include foco;
+
+    display: inline-flex;
+    gap: var(--e-2);
+    align-items: center;
+    justify-content: center;
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    line-height: 1;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: var(--r-pildora);
+    transition: filter var(--m-rapido) ease;
+
+    &:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    &--md {
+      padding-inline: var(--e-6);
+    }
+
+    &--lg {
+      min-height: 54px;
+      padding-inline: var(--e-8);
+      font-size: var(--t-base);
+    }
+
+    &--ancho {
+      width: 100%;
+    }
+
+    // Acción principal. Solo una por pantalla visible.
+    &--primario {
+      color: var(--c-texto-inverso);
+      background: var(--c-acento);
+    }
+
+    // Acción secundaria sobre fondo claro.
+    &--secundario {
+      color: var(--c-tinta);
+      background: var(--c-fondo);
+      border-color: var(--c-borde);
+    }
+
+    // Acción principal sobre fondo oscuro: se invierte para conservar contraste.
+    &--claro {
+      color: var(--c-fondo-oscuro);
+      background: var(--c-fondo);
+    }
+
+    // Acción secundaria sobre fondo oscuro.
+    &--fantasma {
+      color: var(--c-texto-inverso);
+      background: transparent;
+      border-color: var(--c-borde-oscuro);
+    }
+
+    &--fantasma:focus-visible,
+    &--claro:focus-visible {
+      outline-color: var(--c-fondo);
+    }
+  }
+</style>

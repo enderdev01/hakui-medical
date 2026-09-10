@@ -1,0 +1,110 @@
+---
+import Boton from './Boton.astro';
+import Marca from './Marca.astro';
+import { clinica, navegacion } from '@data/index';
+
+// La cabecera se apoya sobre el fondo oscuro del hero y no lleva decoración
+// encima. En el diseño previo el borde de un círculo decorativo cruzaba la
+// barra y se leía como una raya blanca sin sentido; por eso no hay nada
+// posicionado detrás de esta franja.
+---
+
+<header class="cabecera">
+  <div class="cabecera__interior">
+    <Marca tono="claro" />
+
+    <nav class="cabecera__nav" aria-label="Secciones del sitio">
+      <ul class="cabecera__enlaces">
+        {navegacion.map((item) => (
+          <li>
+            <a class="cabecera__enlace" href={item.ancla}>
+              {item.texto}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="cabecera__acciones">
+      <a class="cabecera__telefono" href={`tel:${clinica.telefono}`}>
+        {clinica.telefono}
+      </a>
+      <Boton href="#asistente">Agendar cita</Boton>
+    </div>
+  </div>
+</header>
+
+<style lang="scss">
+  .cabecera {
+    background: var(--c-fondo-oscuro);
+    border-block-end: 1px solid var(--c-borde-oscuro);
+  }
+
+  .cabecera__interior {
+    @include contenedor;
+
+    display: flex;
+    gap: var(--e-8);
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--e-4);
+  }
+
+  .cabecera__nav {
+    // La navegación de escritorio se oculta en móvil: allí manda el menú de ONI-34.
+    display: none;
+
+    @include desde('lg') {
+      display: block;
+    }
+  }
+
+  .cabecera__enlaces {
+    display: flex;
+    gap: var(--e-8);
+    align-items: center;
+  }
+
+  .cabecera__enlace {
+    @include foco;
+
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-texto-inverso-tenue);
+    transition: color var(--m-rapido) ease;
+
+    &:hover {
+      color: var(--c-texto-inverso);
+    }
+
+    &:focus-visible {
+      outline-color: var(--c-fondo);
+    }
+  }
+
+  .cabecera__acciones {
+    display: none;
+
+    @include desde('lg') {
+      display: flex;
+      gap: var(--e-5);
+      align-items: center;
+    }
+  }
+
+  .cabecera__telefono {
+    @include foco;
+
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-texto-inverso);
+
+    &:hover {
+      color: var(--c-texto-inverso-tenue);
+    }
+
+    &:focus-visible {
+      outline-color: var(--c-fondo);
+    }
+  }
+</style>
