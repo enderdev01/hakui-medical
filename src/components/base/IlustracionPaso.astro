@@ -1,0 +1,83 @@
+---
+// Ilustraciones planas de los tres pasos. Son decorativas: el texto del paso ya
+// dice todo, así que se ocultan a los lectores de pantalla.
+interface Props {
+  nombre: 'formulario' | 'calendario' | 'consulta';
+}
+
+const { nombre } = Astro.props;
+---
+
+<svg class="ilustracion" viewBox="0 0 112 96" fill="none" aria-hidden="true">
+  {nombre === 'formulario' && (
+    <>
+      <rect x="6" y="10" width="76" height="80" rx="16" fill="var(--c-celeste-suave)" />
+      <rect
+        x="22"
+        y="26"
+        width="76"
+        height="60"
+        rx="16"
+        fill="var(--c-fondo)"
+        stroke="var(--c-borde)"
+        stroke-width="2"
+      />
+      <rect x="36" y="42" width="34" height="8" rx="4" fill="var(--c-acento)" />
+      <rect x="36" y="58" width="48" height="7" rx="3.5" fill="var(--c-borde)" />
+      <circle cx="86" cy="46" r="12" fill="var(--c-acento-suave)" />
+      <path
+        d="M81 46l4 4 7-8"
+        stroke="var(--c-acento)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </>
+  )}
+
+  {nombre === 'calendario' && (
+    <>
+      <rect x="14" y="16" width="84" height="72" rx="18" fill="var(--c-acento-suave)" />
+      <rect x="26" y="8" width="8" height="18" rx="4" fill="var(--c-acento)" />
+      <rect x="78" y="8" width="8" height="18" rx="4" fill="var(--c-acento)" />
+      <rect x="14" y="36" width="84" height="2.6" fill="var(--c-acento-borde)" />
+      <rect x="28" y="50" width="20" height="14" rx="6" fill="var(--c-fondo)" />
+      <rect x="56" y="50" width="20" height="14" rx="6" fill="var(--c-celeste)" />
+      <rect x="28" y="70" width="20" height="12" rx="6" fill="var(--c-fondo)" />
+      <rect x="56" y="70" width="20" height="12" rx="6" fill="var(--c-fondo)" />
+    </>
+  )}
+
+  {nombre === 'consulta' && (
+    <>
+      <circle cx="56" cy="48" r="40" fill="var(--c-celeste-suave)" />
+      <path d="M30 84v-10a26 26 0 0 1 52 0v10z" fill="var(--c-acento)" />
+      <circle cx="56" cy="40" r="17" fill="var(--c-ilustracion-piel)" />
+      <path
+        d="M39 40a17 17 0 0 1 34 0c0-3-1-6-3-8-4 3-10 4-15 2-5-2-9-1-12 3-2 2-4 5-4 3z"
+        fill="var(--c-ilustracion-pelo)"
+      />
+      <path
+        d="M46 62v9a10 10 0 0 0 20 0v-5"
+        stroke="var(--c-celeste-fuerte)"
+        stroke-width="3.4"
+        stroke-linecap="round"
+      />
+      <circle
+        cx="66"
+        cy="60"
+        r="6"
+        fill="var(--c-fondo)"
+        stroke="var(--c-celeste-fuerte)"
+        stroke-width="3.2"
+      />
+    </>
+  )}
+</svg>
+
+<style lang="scss">
+  .ilustracion {
+    inline-size: 112px;
+    block-size: 94px;
+  }
+</style>

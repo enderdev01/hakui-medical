@@ -1,0 +1,63 @@
+---
+import EncabezadoSeccion from '@components/base/EncabezadoSeccion.astro';
+import IlustracionPaso from '@components/base/IlustracionPaso.astro';
+import Seccion from '@components/base/Seccion.astro';
+import { proceso } from '@data/index';
+
+// Los pasos van numerados porque son una secuencia real: no se pueden hacer en
+// otro orden. Numerar una lista que no es secuencia sería decoración.
+---
+
+<Seccion>
+  <EncabezadoSeccion eyebrow="Cómo funciona" titulo="De la duda a la cita, en tres pasos" />
+
+  <ol class="proceso">
+    {proceso.map((paso, indice) => (
+      <li class="paso">
+        <IlustracionPaso nombre={paso.ilustracion} />
+        <h3 class="paso__titulo">
+          <span class="paso__numero">{indice + 1}.</span> {paso.titulo}
+        </h3>
+        <p class="paso__descripcion">{paso.descripcion}</p>
+      </li>
+    ))}
+  </ol>
+</Seccion>
+
+<style lang="scss">
+  .proceso {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-4);
+    padding-block-start: var(--e-8);
+
+    @include desde('lg') {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .paso {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+    height: 100%;
+    padding: var(--e-6);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-lg);
+  }
+
+  .paso__titulo {
+    font-size: 1.25rem;
+  }
+
+  .paso__numero {
+    color: var(--c-acento);
+  }
+
+  .paso__descripcion {
+    font-size: var(--t-sm);
+    line-height: var(--i-base);
+    color: var(--c-texto-tenue);
+  }
+</style>

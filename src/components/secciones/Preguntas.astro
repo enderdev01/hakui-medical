@@ -1,0 +1,166 @@
+---
+import EncabezadoSeccion from '@components/base/EncabezadoSeccion.astro';
+import Seccion from '@components/base/Seccion.astro';
+import { clinica, preguntas } from '@data/index';
+
+// `details` y `summary` traen el comportamiento de teclado y el estado
+// abierto/cerrado de la plataforma. No hace falta JavaScript, y sin JavaScript
+// la sección sigue funcionando entera.
+
+// Los datos estructurados salen del mismo módulo que la sección visible, así
+// que no pueden decir algo distinto de lo que el visitante lee.
+const datosEstructurados = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: preguntas.map((pregunta) => ({
+    '@type': 'Question',
+    name: pregunta.pregunta,
+    acceptedAnswer: { '@type': 'Answer', text: pregunta.respuesta },
+  })),
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(datosEstructurados)}></script>
+<Seccion id="preguntas">
+  <div class="preguntas">
+    <div class="preguntas__intro">
+      <EncabezadoSeccion eyebrow="Preguntas" titulo="Lo que más nos preguntan" />
+      <p class="preguntas__contacto">
+        ¿Te falta algo? Escríbenos a <a href={`mailto:${clinica.correo}`}>{clinica.correo}</a> y te
+        contestamos el mismo día hábil.
+      </p>
+    </div>
+
+    <ul class="preguntas__lista">
+      {preguntas.map((pregunta) => (
+        <li>
+          <details class="pregunta" open={pregunta.abiertaPorDefecto}>
+            <summary class="pregunta__titulo">
+              <span>{pregunta.pregunta}</span>
+              <svg class="pregunta__signo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M6 9l6 6 6-6"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </summary>
+            <div class="pregunta__cuerpo">
+              <p>{pregunta.respuesta}</p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Seccion>
+
+<style lang="scss">
+  .preguntas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-8);
+
+    @include desde('lg') {
+      grid-template-columns: 22rem 1fr;
+      gap: var(--e-12);
+    }
+  }
+
+  .preguntas__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+  }
+
+  .preguntas__contacto {
+    @include texto-lectura;
+
+    font-size: var(--t-sm);
+    color: var(--c-texto-tenue);
+  }
+
+  .preguntas__lista {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+  }
+
+  .pregunta {
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+    border-radius: var(--r-md);
+  }
+
+  .pregunta__titulo {
+    @include foco;
+
+    display: flex;
+    gap: var(--e-4);
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--toque-min);
+    padding: var(--e-5) var(--e-6);
+    font-size: var(--t-base);
+    font-weight: var(--p-medio);
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .pregunta__signo {
+    inline-size: 20px;
+    block-size: 20px;
+    color: var(--c-texto-tenue);
+    transition: transform var(--m-rapido) ease;
+
+    .pregunta[open] & {
+      transform: rotate(180deg);
+    }
+  }
+
+  .pregunta__cuerpo {
+    padding: 0 var(--e-6) var(--e-5);
+    font-size: var(--t-sm);
+    line-height: 1.65;
+    color: var(--c-texto-tenue);
+  }
+
+  // `interpolate-size` permite animar de 0 a `auto`. Donde no esté soportado, la
+  // apertura es instantánea, que es un degradado perfectamente aceptable.
+  @supports (interpolate-size: allow-keywords) {
+    .pregunta {
+      interpolate-size: allow-keywords;
+
+      &::details-content {
+        block-size: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          block-size var(--m-medio) var(--m-curva),
+          content-visibility var(--m-medio) allow-discrete,
+          opacity var(--m-medio) ease;
+      }
+
+      &[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+      }
+    }
+  }
+
+  @include movimiento-reducido {
+    .pregunta__signo {
+      transition: none;
+    }
+
+    .pregunta::details-content {
+      transition: none;
+    }
+  }
+</style>

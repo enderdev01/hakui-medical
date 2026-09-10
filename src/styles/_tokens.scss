@@ -54,6 +54,12 @@
   --c-alerta-texto: #991b1b;
   --c-alerta-icono: #b91c1c;
 
+  // ---------- Color: ilustración ----------
+  // Tonos que solo usan los dibujos. Van acá igual que el resto para que ninguna
+  // hoja de estilo declare un literal.
+  --c-ilustracion-piel: #f3ceac;
+  --c-ilustracion-pelo: #23343f;
+
   // ---------- Tipografía ----------
   --f-titulo: 'Manrope Variable', 'Segoe UI', arial, sans-serif;
   --f-texto: 'Inter Variable', 'Helvetica Neue', arial, sans-serif;
