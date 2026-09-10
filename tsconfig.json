@@ -8,14 +8,13 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": ".",
     "paths": {
-      "@styles/*": ["src/styles/*"],
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@islands/*": ["src/islands/*"],
-      "@data/*": ["src/data/*"],
-      "@lib/*": ["src/lib/*"]
+      "@styles/*": ["./src/styles/*"],
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@islands/*": ["./src/islands/*"],
+      "@data/*": ["./src/data/*"],
+      "@lib/*": ["./src/lib/*"]
     },
     "types": ["node"]
   }
