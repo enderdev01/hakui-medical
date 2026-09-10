@@ -151,9 +151,27 @@ const respaldos = [
     position: relative;
     display: flex;
     justify-content: center;
+
+    // Halo detrás de la ilustración. Va como pseudoelemento del contenedor de
+    // la imagen y no como un SVG suelto en el hero: así no puede volver a
+    // cruzar la barra de navegación, que fue el defecto del diseño anterior.
+    &::before {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
+      z-index: 0;
+      aspect-ratio: 1;
+      inline-size: min(115%, 560px);
+      content: '';
+      background: var(--c-fondo-oscuro-halo);
+      border-radius: var(--r-pildora);
+      translate: -50% -50%;
+    }
   }
 
   .hero__imagen {
+    position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 620px;
     height: auto;
@@ -239,6 +257,7 @@ const respaldos = [
   // ---------- Tarjetas flotantes ----------
   .tarjeta {
     position: absolute;
+    z-index: 2;
     display: flex;
     padding: var(--e-4) var(--e-5);
     background: var(--c-fondo);
