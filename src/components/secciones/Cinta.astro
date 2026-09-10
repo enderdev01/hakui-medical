@@ -1,0 +1,87 @@
+---
+import { valores } from '@data/index';
+
+// El bucle continuo se logra duplicando el contenido y trasladando el 50 %.
+// La copia se oculta a los lectores de pantalla: si no, anuncia cada valor dos
+// veces sin que nada lo justifique.
+---
+
+<div class="cinta">
+  <div class="cinta__pista">
+    <ul class="cinta__grupo">
+      {valores.map((valor) => (
+        <li class="cinta__item">
+          {valor.texto}
+          <span class="cinta__punto" aria-hidden="true" />
+        </li>
+      ))}
+    </ul>
+    <ul class="cinta__grupo" aria-hidden="true">
+      {valores.map((valor) => (
+        <li class="cinta__item">
+          {valor.texto}
+          <span class="cinta__punto" />
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style lang="scss">
+  .cinta {
+    padding-block: var(--e-4);
+    overflow: hidden;
+    background: var(--c-fondo);
+    border-block-end: 1px solid var(--c-borde-suave);
+  }
+
+  .cinta__pista {
+    display: flex;
+    width: max-content;
+    animation: desplazar 38s linear infinite;
+  }
+
+  .cinta__grupo {
+    display: flex;
+    align-items: center;
+  }
+
+  .cinta__item {
+    display: flex;
+    gap: var(--e-6);
+    align-items: center;
+    padding-inline-end: var(--e-6);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    color: var(--c-texto);
+    white-space: nowrap;
+  }
+
+  .cinta__punto {
+    inline-size: 5px;
+    block-size: 5px;
+    background: var(--c-borde);
+    border-radius: var(--r-pildora);
+  }
+
+  @keyframes desplazar {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  // Quieta y legible: no se recorta ni se esconde la mitad de los valores.
+  @include movimiento-reducido {
+    .cinta {
+      overflow-x: auto;
+    }
+
+    .cinta__pista {
+      animation: none;
+    }
+  }
+</style>

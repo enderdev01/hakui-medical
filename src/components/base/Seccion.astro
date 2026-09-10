@@ -1,0 +1,37 @@
+---
+// Envoltorio de sección. Existe para que el ritmo vertical y el ancho salgan
+// siempre del mismo lugar: si cada sección los declara por su cuenta, la página
+// se lee como secciones pegadas (ONI-24).
+interface Props {
+  id?: string;
+  /** Alterna el fondo claro y el neutro a lo largo de la página. */
+  fondo?: 'claro' | 'neutro';
+  class?: string;
+}
+
+const { id, fondo = 'claro', class: clase } = Astro.props;
+---
+
+<section class:list={['seccion', `seccion--${fondo}`, clase]} id={id}>
+  <div class="seccion__interior">
+    <slot />
+  </div>
+</section>
+
+<style lang="scss">
+  .seccion {
+    @include seccion;
+
+    &--claro {
+      background: var(--c-fondo);
+    }
+
+    &--neutro {
+      background: var(--c-fondo-alt);
+    }
+  }
+
+  .seccion__interior {
+    @include contenedor;
+  }
+</style>

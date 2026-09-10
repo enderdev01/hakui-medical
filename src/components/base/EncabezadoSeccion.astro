@@ -1,0 +1,48 @@
+---
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  entrada?: string;
+  /** Centrado solo donde la sección lo pide, como el asistente. */
+  centrado?: boolean;
+}
+
+const { eyebrow, titulo, entrada, centrado = false } = Astro.props;
+---
+
+<header class:list={['encabezado', { 'encabezado--centrado': centrado }]}>
+  <p class="encabezado__eyebrow">{eyebrow}</p>
+  <h2 class="encabezado__titulo">{titulo}</h2>
+  {entrada && <p class="encabezado__entrada">{entrada}</p>}
+</header>
+
+<style lang="scss">
+  .encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    max-width: 40ch;
+
+    &--centrado {
+      align-items: center;
+      max-width: 46ch;
+      margin-inline: auto;
+      text-align: center;
+    }
+  }
+
+  .encabezado__eyebrow {
+    font-size: var(--t-xs);
+    font-weight: var(--p-medio);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-acento);
+  }
+
+  .encabezado__entrada {
+    max-width: var(--ancho-texto);
+    font-size: var(--t-lead);
+    line-height: var(--i-base);
+    color: var(--c-texto-tenue);
+  }
+</style>
