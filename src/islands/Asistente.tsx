@@ -1,9 +1,21 @@
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { clinica } from '@data/index';
 import type { AreaClinica, PerfilPaciente, Urgencia } from '@data/tipos';
 import { consultaPara, type ConsultaSugerida } from '@lib/triage/consulta';
 import { MINIMO_DE_TEXTO, orientar, type Senal } from '@lib/triage/motor';
-import { duracion as formatearDuracion, precio as formatearPrecio } from '@lib/formato';
+import {
+  duracion as formatearDuracion,
+  enlaceWhatsapp,
+  mensajesWhatsapp,
+  precio as formatearPrecio,
+} from '@lib/formato';
+import {
+  borrarReserva,
+  codigoDeReserva,
+  guardarReserva,
+  leerReserva,
+  type Reserva,
+} from '@lib/reserva';
 import { ejemplos, opcionesArea, opcionesPerfil, opcionesUrgencia } from './asistente/pasos';
 import './asistente/asistente.scss';
 
@@ -37,7 +49,37 @@ export default function Asistente() {
   const [respuestas, setRespuestas] = useState<Respuestas>({});
 
   const [consulta, setConsulta] = useState<ConsultaSugerida | null>(null);
+  const [reserva, setReserva] = useState<Reserva | null>(null);
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dialogo = useRef<HTMLDialogElement>(null);
+
+  // La reserva se lee después del montaje: en el servidor no hay almacenamiento
+  // y leerlo durante el renderizado daría un desajuste de hidratación.
+  useEffect(() => {
+    setReserva(leerReserva());
+  }, []);
+
+  const agendar = useCallback(() => {
+    if (!consulta) return;
+
+    const nueva: Reserva = {
+      codigo: codigoDeReserva(consulta.especialidad),
+      especialidad: consulta.especialidad,
+      horario: consulta.horario,
+      creada: new Date().toISOString(),
+    };
+
+    guardarReserva(nueva);
+    setReserva(nueva);
+    // `showModal` trae atrapado de foco, cierre con Escape y devolución del
+    // foco al origen sin escribir nada de eso a mano.
+    dialogo.current?.showModal();
+  }, [consulta]);
+
+  const cancelar = useCallback(() => {
+    borrarReserva();
+    setReserva(null);
+  }, []);
 
   const puedeAnalizar = texto.trim().length >= MINIMO_DE_TEXTO;
 
@@ -185,7 +227,14 @@ export default function Asistente() {
         )}
       </div>
 
-      <PanelResultado consulta={consulta} />
+      <PanelResultado
+        consulta={consulta}
+        reserva={reserva}
+        onAgendar={agendar}
+        onCancelar={cancelar}
+      />
+
+      <DialogoConfirmacion refDialogo={dialogo} reserva={reserva} />
     </div>
   );
 }
@@ -420,7 +469,14 @@ function ModoPreguntas({
 
 // -------------------------------------------------------------- resultado
 
-function PanelResultado({ consulta }: { consulta: ConsultaSugerida | null }) {
+interface PanelResultadoProps {
+  consulta: ConsultaSugerida | null;
+  reserva: Reserva | null;
+  onAgendar: () => void;
+  onCancelar: () => void;
+}
+
+function PanelResultado({ consulta, reserva, onAgendar, onCancelar }: PanelResultadoProps) {
   return (
     <div className="resultado">
       {/* La región activa anuncia el resultado a quien usa lector de pantalla,
@@ -428,6 +484,23 @@ function PanelResultado({ consulta }: { consulta: ConsultaSugerida | null }) {
       <div aria-live="polite" className="resultado__vivo">
         {consulta ? `Consulta sugerida: ${consulta.especialidad}` : ''}
       </div>
+
+      {/* La reserva se muestra aunque no haya consulta en pantalla: tras una
+          recarga el paciente pierde lo que escribió, pero su cita sigue ahí. */}
+      {reserva && (
+        <div className="reservada">
+          <div className="reservada__cuerpo">
+            <p className="reservada__titulo">Cita agendada</p>
+            <p className="reservada__detalle">
+              {reserva.especialidad} · {reserva.horario}
+            </p>
+            <p className="reservada__codigo">Código {reserva.codigo}</p>
+          </div>
+          <button type="button" className="reservada__cancelar" onClick={onCancelar}>
+            Cancelar
+          </button>
+        </div>
+      )}
 
       {consulta ? (
         <>
@@ -474,15 +547,41 @@ function PanelResultado({ consulta }: { consulta: ConsultaSugerida | null }) {
           </div>
 
           <div className="resultado__acciones">
-            <button type="button" className="boton boton--primario boton--ancho">
-              Agendar esta cita
+            <button
+              type="button"
+              className="boton boton--primario boton--ancho"
+              onClick={onAgendar}
+              disabled={reserva !== null}
+            >
+              {reserva ? 'Ya tienes una cita agendada' : 'Agendar esta cita'}
             </button>
-            <button type="button" className="boton boton--secundario boton--ancho">
-              Ver otros horarios
-            </button>
+
+            {/* «Ver otros horarios» no puede ser un botón: sin backend no hay
+                agenda que consultar. Pedir otro horario por WhatsApp es lo que
+                realmente pasa, y el mensaje ya lleva la especialidad sugerida
+                para que en recepción no haya que preguntarla de nuevo. */}
+            <a
+              className="boton boton--secundario boton--ancho"
+              href={enlaceWhatsapp(
+                clinica.whatsapp,
+                mensajesWhatsapp.otroHorario(consulta.especialidad),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+                <path
+                  d="M4 20l1.2-4A8 8 0 1 1 8 18.8z"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Pedir otro horario por WhatsApp
+            </a>
           </div>
         </>
-      ) : (
+      ) : reserva ? null : (
         // Estado vacío: mostrar una recomendación antes de que el paciente diga
         // nada haría ver el sistema como decorativo.
         <div className="vacio">
@@ -508,6 +607,65 @@ function PanelResultado({ consulta }: { consulta: ConsultaSugerida | null }) {
         {clinica.emergencias} en lugar de agendar.
       </p>
     </div>
+  );
+}
+
+interface DialogoProps {
+  refDialogo: React.RefObject<HTMLDialogElement | null>;
+  reserva: Reserva | null;
+}
+
+function DialogoConfirmacion({ refDialogo, reserva }: DialogoProps) {
+  return (
+    <dialog className="dialogo" ref={refDialogo} aria-labelledby="dialogo-titulo">
+      {reserva && (
+        <div className="dialogo__cuerpo">
+          <span className="dialogo__sello" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none">
+              <path
+                d="M5 12.5l4.5 4.5L19 7.5"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+
+          <h3 className="dialogo__titulo" id="dialogo-titulo">
+            Tu cita quedó agendada
+          </h3>
+          <p className="dialogo__detalle">
+            {reserva.especialidad} · {reserva.horario}
+          </p>
+          <p className="dialogo__codigo">Código {reserva.codigo}</p>
+          <p className="dialogo__nota">
+            Preséntalo en recepción con tu documento y tu credencial de cobertura.
+          </p>
+
+          <div className="dialogo__acciones">
+            <a
+              className="boton boton--primario boton--ancho"
+              href={enlaceWhatsapp(
+                clinica.whatsapp,
+                mensajesWhatsapp.confirmar(reserva.especialidad, reserva.horario),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Confirmar por WhatsApp
+            </a>
+            <button
+              type="button"
+              className="boton boton--secundario boton--ancho"
+              onClick={() => refDialogo.current?.close()}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+    </dialog>
   );
 }
 

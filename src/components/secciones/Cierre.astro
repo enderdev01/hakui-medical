@@ -1,0 +1,78 @@
+---
+import Boton from '@components/base/Boton.astro';
+import Icono from '@components/base/Icono.astro';
+import { clinica } from '@data/index';
+import { enlaceWhatsapp, mensajesWhatsapp } from '@lib/formato';
+
+// Sin backend no hay formulario: prometería un envío que nadie recibe.
+// WhatsApp es además lo que una clínica de este tamaño usa de verdad.
+const whatsapp = enlaceWhatsapp(clinica.whatsapp, mensajesWhatsapp.general);
+---
+
+<div class="cierre">
+  <div class="cierre__panel">
+    <div class="cierre__texto">
+      <h2 class="cierre__titulo">Empieza por la pregunta más simple: ¿qué te está pasando?</h2>
+      <p class="cierre__entrada">
+        El resto lo resolvemos nosotros. Si prefieres hablar con alguien, atendemos al{' '}
+        {clinica.telefono} de lunes a viernes de 8 a 20 y sábados de 8 a 13.
+      </p>
+    </div>
+
+    <div class="cierre__acciones">
+      <Boton href="#asistente" variante="claro" tamano="lg">
+        Describir mis síntomas
+      </Boton>
+      <Boton href={whatsapp} variante="fantasma" externo>
+        <Icono nombre="whatsapp" tamano={18} />
+        Escribir por WhatsApp
+      </Boton>
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .cierre {
+    @include contenedor;
+
+    padding-block: var(--e-4) var(--e-seccion);
+    background: var(--c-fondo);
+  }
+
+  .cierre__panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-8);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--e-10) var(--e-8);
+    background: var(--c-fondo-oscuro);
+    border-radius: var(--r-xl);
+  }
+
+  .cierre__texto {
+    display: flex;
+    flex: 1 1 34ch;
+    flex-direction: column;
+    gap: var(--e-3);
+  }
+
+  .cierre__titulo {
+    max-width: 24ch;
+    font-size: var(--t-h2);
+    color: var(--c-texto-inverso);
+  }
+
+  .cierre__entrada {
+    max-width: 52ch;
+    font-size: var(--t-base);
+    line-height: var(--i-base);
+    color: var(--c-texto-inverso-tenue);
+  }
+
+  .cierre__acciones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+  }
+</style>

@@ -552,3 +552,122 @@
     transition: none;
   }
 }
+
+// ------------------------------------------------------------ cita agendada
+.reservada {
+  display: flex;
+  gap: var(--e-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--e-4) var(--e-5);
+  background: var(--c-acento-suave);
+  border: 1px solid var(--c-acento-borde);
+  border-radius: var(--r-md);
+}
+
+.reservada__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reservada__titulo {
+  font-size: var(--t-xs);
+  font-weight: var(--p-medio);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-acento-fuerte);
+}
+
+.reservada__detalle {
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-tinta);
+}
+
+.reservada__codigo {
+  font-size: var(--t-xs);
+  color: var(--c-texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+.reservada__cancelar {
+  @include foco;
+
+  flex-shrink: 0;
+  min-height: var(--toque-min);
+  padding-inline: var(--e-3);
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-texto-tenue);
+  text-decoration: underline;
+}
+
+// ---------------------------------------------------------------- diálogo
+.dialogo {
+  max-inline-size: min(28rem, calc(100vw - 2rem));
+  padding: 0;
+  color: var(--c-tinta);
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-xl);
+  box-shadow: var(--s-panel);
+
+  &::backdrop {
+    background: rgb(5 42 34 / 55%);
+  }
+}
+
+.dialogo__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  align-items: flex-start;
+  padding: var(--e-8);
+}
+
+.dialogo__sello {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  color: var(--c-acento-fuerte);
+  background: var(--c-acento-suave);
+  border-radius: var(--r-pildora);
+}
+
+.dialogo__titulo {
+  font-family: var(--f-titulo);
+  font-size: var(--t-h3);
+  font-weight: var(--p-fuerte);
+}
+
+.dialogo__detalle {
+  font-size: var(--t-base);
+  font-weight: var(--p-medio);
+  color: var(--c-texto);
+}
+
+.dialogo__codigo {
+  padding: var(--e-2) var(--e-4);
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-acento-fuerte);
+  background: var(--c-acento-suave);
+  border-radius: var(--r-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.dialogo__nota {
+  font-size: var(--t-sm);
+  line-height: var(--i-base);
+  color: var(--c-texto-tenue);
+}
+
+.dialogo__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  width: 100%;
+  padding-block-start: var(--e-2);
+}

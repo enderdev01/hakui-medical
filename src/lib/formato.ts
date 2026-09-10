@@ -31,3 +31,18 @@ export function duracion(minutos: number): string {
 export function enlaceWhatsapp(numero: string, mensaje: string): string {
   return `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
 }
+
+/**
+ * Mensajes de WhatsApp del sitio, en un solo lugar.
+ *
+ * Se escriben acá y no en cada componente porque son copia de cara al paciente:
+ * si mañana cambia el tono, cambia en un archivo.
+ */
+export const mensajesWhatsapp = {
+  general: 'Hola, quiero consultar por una cita en la clínica.',
+  cobertura: 'Hola, quiero consultar si mi cobertura cubre una consulta.',
+  otroHorario: (especialidad: string) =>
+    `Hola, el asistente me sugirió una consulta de ${especialidad} y quiero pedir otro horario.`,
+  confirmar: (especialidad: string, horario: string) =>
+    `Hola, reservé una consulta de ${especialidad} para el ${horario} y quiero confirmarla.`,
+};
