@@ -133,6 +133,50 @@ svg {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Apariciones al desplazar
+//
+// REGLA QUE NO SE NEGOCIA: en reposo, todo es visible. Nada arranca en
+// `opacity: 0` esperando a que algo lo revele. Si el JavaScript falla justo
+// cuando el cliente abre la demostración, la página se lee igual.
+//
+// De ahí salen los dos caminos: donde el navegador sabe animar según el
+// desplazamiento, lo resuelve el CSS sin JavaScript; donde no, el respaldo solo
+// se activa si el script llegó a marcar el documento.
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .revelar {
+      animation: revelar linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 25%;
+    }
+  }
+
+  // Respaldo. La clase la pone el script, y solo cuando el navegador no soporta
+  // lo anterior: sin script, este bloque no aplica y nada se oculta.
+  .respaldo-revelar .revelar {
+    opacity: 0;
+    transition:
+      opacity var(--m-lento) ease,
+      transform var(--m-lento) var(--m-curva);
+    transform: translateY(14px);
+  }
+
+  .respaldo-revelar .revelar[data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
 // Política transversal de movimiento reducido. Se amplía y se verifica en ONI-32.
 @media (prefers-reduced-motion: reduce) {
   *,

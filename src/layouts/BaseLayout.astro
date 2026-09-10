@@ -1,6 +1,7 @@
 ---
 import Footer from '@components/base/Footer.astro';
 import Header from '@components/base/Header.astro';
+import Revelaciones from '@components/base/Revelaciones.astro';
 import { clinica, especialidades } from '@data/index';
 import '@styles/global.scss';
 
@@ -79,5 +80,6 @@ const datosEstructurados = {
       <slot />
     </main>
     <Footer />
+    <Revelaciones />
   </body>
 </html>

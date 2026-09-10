@@ -63,6 +63,23 @@ grep -rn 'pendientes\.' src/data --include='*.ts'
 
 Se busca la referencia y no los corchetes a secas porque los corchetes aparecen también en comentarios y en prosa, y el listado se llena de ruido.
 
+## Política de movimiento
+
+En un sitio de salud hay personas con vértigo, migraña o sensibilidad vestibular entre los usuarios reales. El movimiento no es decorativo ni opcional: es un requisito con reglas.
+
+**Al agregar una sección nueva:**
+
+1. **En reposo, todo visible.** Nada arranca en `opacity: 0` esperando a que algo lo revele. Si el JavaScript falla justo cuando el cliente abre la demostración, la página se lee igual.
+2. **Solo se animan `transform` y `opacity`.** Animar altura, ancho o posición fuerza recálculo de diseño en cada fotograma. La única excepción declarada es la apertura de las preguntas frecuentes, que no puede hacerse de otra forma.
+3. **Toda animación va dentro de `@media (prefers-reduced-motion: no-preference)`**, o queda cubierta por la regla global que las neutraliza.
+4. **Con movimiento reducido, nada se vuelve invisible ni inalcanzable.** Se quita el movimiento, no el contenido.
+
+**Esto no depende de que alguien se acuerde.** `src/lib/movimiento.test.ts` lee el CSS realmente emitido en `dist/` y falla si aparece una animación fuera de la política, una propiedad cara en una keyframe o un bloque que arranca invisible. La prueba está verificada contra una violación deliberada: la detecta.
+
+```bash
+npm run verify   # construye y después corre la prueba sobre el CSS emitido
+```
+
 ## Avisos que no se quitan sin decisión explícita
 
 - **El asistente orienta, no diagnostica.** El aviso es visible en la interfaz, no enterrado en el pie.

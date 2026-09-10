@@ -1,0 +1,40 @@
+---
+// Respaldo de las apariciones al desplazar.
+//
+// Solo hace algo en navegadores sin `animation-timeline`. Donde sí existe, el
+// CSS lo resuelve solo y este script no toca nada.
+---
+
+<script>
+  const soportaTimeline =
+    typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: view()');
+  const prefiereQuieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!soportaTimeline && !prefiereQuieto) {
+    const bloques = document.querySelectorAll<HTMLElement>('.revelar');
+
+    // La clase se pone antes de observar: es lo que activa el estado oculto.
+    // Si este script no corre, nunca se oculta nada.
+    document.documentElement.classList.add('respaldo-revelar');
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const entrada of entradas) {
+          if (!entrada.isIntersecting) continue;
+          entrada.target.setAttribute('data-visible', '');
+          // Una sola vez: al volver a subir no se repite.
+          observador.unobserve(entrada.target);
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' },
+    );
+
+    bloques.forEach((bloque) => observador.observe(bloque));
+
+    // Red de seguridad: si el observador no llegara a dispararse, a los dos
+    // segundos se muestra todo igual. Nunca se queda contenido invisible.
+    window.setTimeout(() => {
+      bloques.forEach((bloque) => bloque.setAttribute('data-visible', ''));
+    }, 2000);
+  }
+</script>

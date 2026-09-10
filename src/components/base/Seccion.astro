@@ -13,7 +13,7 @@ const { id, fondo = 'claro', class: clase } = Astro.props;
 ---
 
 <section class:list={['seccion', `seccion--${fondo}`, clase]} id={id}>
-  <div class="seccion__interior">
+  <div class="seccion__interior revelar">
     <slot />
   </div>
 </section>
