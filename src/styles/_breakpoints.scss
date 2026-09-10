@@ -1,0 +1,25 @@
+// Puntos de corte del proyecto. Se amplían en ONI-33.
+$bp: (
+  'sm': 480px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+);
+
+@mixin desde($nombre) {
+  $valor: map-get($bp, $nombre);
+
+  @if $valor == null {
+    @error 'Punto de corte desconocido: #{$nombre}';
+  }
+
+  @media (min-width: $valor) {
+    @content;
+  }
+}
+
+@mixin movimiento-reducido {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

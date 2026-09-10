@@ -1,0 +1,10 @@
+// Estilos base. Los tokens del sistema de diseño llegan en ONI-13.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}

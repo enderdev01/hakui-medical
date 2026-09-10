@@ -1,0 +1,5 @@
+// Punto de entrada único para todo lo que se inyecta en cada archivo SCSS.
+// Solo debe contener cosas que NO emiten CSS: variables, funciones y mixins.
+// El sistema de diseño completo llega en ONI-13.
+
+@forward 'breakpoints';
