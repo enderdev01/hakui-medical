@@ -1,5 +1,7 @@
-// Punto de entrada único para todo lo que se inyecta en cada archivo SCSS.
-// Solo debe contener cosas que NO emiten CSS: variables, funciones y mixins.
-// El sistema de diseño completo llega en ONI-13.
+// Punto de entrada que Vite inyecta al principio de cada archivo SCSS.
+//
+// Solo puede contener cosas que NO emiten CSS: variables de Sass, funciones y
+// mixins. Si acá entrara algo que emite reglas, se duplicaría en cada archivo.
+// Los tokens se emiten una sola vez desde global.scss.
 
-@forward 'breakpoints';
+@forward 'mixins';

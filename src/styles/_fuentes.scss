@@ -1,0 +1,31 @@
+// Fuentes autohospedadas, subconjunto latino.
+//
+// Se copian a `public/fonts/` en vez de importarlas desde el paquete para que la
+// ruta sea estable y se puedan precargar desde el layout. Con hash de build no
+// se podría escribir el `<link rel="preload">` a mano.
+//
+// `font-display: swap` muestra el texto de inmediato con la fuente de respaldo.
+// Las de respaldo se eligieron por métricas parecidas para que el intercambio
+// no mueva el diseño.
+
+@font-face {
+  font-family: 'Manrope Variable';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/manrope-latin.woff2') format('woff2-variations');
+  unicode-range:
+    u+0000-00ff, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc, u+2000-206f, u+2074,
+    u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2-variations');
+  unicode-range:
+    u+0000-00ff, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc, u+2000-206f, u+2074,
+    u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
+}

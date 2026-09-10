@@ -1,0 +1,423 @@
+---
+// Referencia interna del sistema de diseño. Solo existe con `astro dev`.
+// Sirve para ver la paleta, la escala tipográfica y los estados de los controles
+// en un solo lugar, sin tener que buscarlos por la landing.
+import '@styles/global.scss';
+
+const marca = [
+  { token: '--c-esmeralda', nombre: 'Esmeralda' },
+  { token: '--c-esmeralda-fuerte', nombre: 'Esmeralda fuerte' },
+  { token: '--c-esmeralda-profundo', nombre: 'Esmeralda profundo' },
+  { token: '--c-esmeralda-suave', nombre: 'Esmeralda suave' },
+  { token: '--c-celeste', nombre: 'Celeste' },
+  { token: '--c-celeste-fuerte', nombre: 'Celeste fuerte' },
+  { token: '--c-celeste-suave', nombre: 'Celeste suave' },
+];
+
+const superficies = [
+  { token: '--c-fondo', nombre: 'Fondo' },
+  { token: '--c-fondo-alt', nombre: 'Fondo alterno' },
+  { token: '--c-fondo-oscuro', nombre: 'Fondo oscuro' },
+  { token: '--c-fondo-oscuro-alt', nombre: 'Fondo oscuro alterno' },
+  { token: '--c-borde', nombre: 'Borde' },
+  { token: '--c-borde-suave', nombre: 'Borde suave' },
+];
+
+const texto = [
+  { token: '--c-tinta', nombre: 'Tinta' },
+  { token: '--c-texto', nombre: 'Texto' },
+  { token: '--c-texto-tenue', nombre: 'Texto tenue' },
+  { token: '--c-texto-debil', nombre: 'Texto débil' },
+];
+
+const semantico = [
+  { token: '--c-alerta-fondo', nombre: 'Alerta fondo' },
+  { token: '--c-alerta-borde', nombre: 'Alerta borde' },
+  { token: '--c-alerta-texto', nombre: 'Alerta texto' },
+];
+
+const escala = [
+  { token: '--t-display', nombre: 'Display', ejemplo: 'Describe lo que sientes', titulo: true },
+  {
+    token: '--t-h2',
+    nombre: 'Titular de sección',
+    ejemplo: 'Seis áreas, una sola sede',
+    titulo: true,
+  },
+  { token: '--t-h3', nombre: 'Titular de tarjeta', ejemplo: 'Otorrinolaringología', titulo: true },
+  {
+    token: '--t-lead',
+    nombre: 'Entrada',
+    ejemplo: 'Tres preguntas cortas y sabes a qué consulta ir.',
+    titulo: false,
+  },
+  {
+    token: '--t-base',
+    nombre: 'Texto',
+    ejemplo: 'Extracción sin cita previa de 7 a 10.',
+    titulo: false,
+  },
+  {
+    token: '--t-sm',
+    nombre: 'Texto pequeño',
+    ejemplo: 'Valor de referencia particular',
+    titulo: false,
+  },
+  {
+    token: '--t-xs',
+    nombre: 'Anotación',
+    ejemplo: 'Con cobertura básica puede quedar sin costo.',
+    titulo: false,
+  },
+];
+
+const espaciado = ['--e-1', '--e-2', '--e-3', '--e-4', '--e-6', '--e-8', '--e-12', '--e-16'];
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Referencia del sistema de diseño</title>
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <main class="ref">
+      <header class="ref__cabecera">
+        <p class="ref__aviso">Solo visible en desarrollo</p>
+        <h1>Sistema de diseño</h1>
+        <p class="ref__entrada">
+          Todo lo que aparece aquí sale de <code>_tokens.scss</code>. Si un valor falta, se agrega
+          ahí y no en la sección que lo necesita.
+        </p>
+      </header>
+
+      <section class="ref__bloque">
+        <h2>Color</h2>
+
+        <h3>Marca</h3>
+        <ul class="ref__paleta">
+          {marca.map(({ token, nombre }) => (
+            <li class="ref__muestra">
+              <span class="ref__chip" style={`background: var(${token})`} />
+              <span class="ref__nombre">{nombre}</span>
+              <code>{token}</code>
+            </li>
+          ))}
+        </ul>
+
+        <h3>Superficies</h3>
+        <ul class="ref__paleta">
+          {superficies.map(({ token, nombre }) => (
+            <li class="ref__muestra">
+              <span class="ref__chip ref__chip--borde" style={`background: var(${token})`} />
+              <span class="ref__nombre">{nombre}</span>
+              <code>{token}</code>
+            </li>
+          ))}
+        </ul>
+
+        <h3>Texto</h3>
+        <ul class="ref__paleta">
+          {texto.map(({ token, nombre }) => (
+            <li class="ref__muestra">
+              <span class="ref__chip" style={`background: var(${token})`} />
+              <span class="ref__nombre">{nombre}</span>
+              <code>{token}</code>
+            </li>
+          ))}
+        </ul>
+
+        <h3>Semántico</h3>
+        <p class="ref__nota">
+          Separado del acento a propósito: una alerta no cambia de color porque cambie la marca del
+          cliente.
+        </p>
+        <ul class="ref__paleta">
+          {semantico.map(({ token, nombre }) => (
+            <li class="ref__muestra">
+              <span class="ref__chip ref__chip--borde" style={`background: var(${token})`} />
+              <span class="ref__nombre">{nombre}</span>
+              <code>{token}</code>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ref__bloque">
+        <h2>Tipografía</h2>
+        <p class="ref__nota">Manrope 600–700 en títulos, Inter 400–500 en cuerpo e interfaz.</p>
+        <ul class="ref__escala">
+          {escala.map(({ token, nombre, ejemplo, titulo }) => (
+            <li class="ref__linea">
+              <span class="ref__etiqueta">
+                {nombre} <code>{token}</code>
+              </span>
+              <span
+                class={titulo ? 'ref__ejemplo ref__ejemplo--titulo' : 'ref__ejemplo'}
+                style={`font-size: var(${token})`}
+              >
+                {ejemplo}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ref__bloque">
+        <h2>Espaciado</h2>
+        <ul class="ref__espaciado">
+          {espaciado.map((token) => (
+            <li class="ref__barra">
+              <code>{token}</code>
+              <span style={`inline-size: var(${token})`} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ref__bloque">
+        <h2>Controles</h2>
+        <p class="ref__nota">
+          Tabula sobre ellos para ver el foco: es el mismo anillo en todo el sitio.
+        </p>
+        <div class="ref__controles">
+          <button class="btn btn--primario" type="button">
+            Agendar cita
+          </button>
+          <button class="btn btn--secundario" type="button">
+            Ver aranceles
+          </button>
+          <button class="btn btn--primario" type="button" disabled>
+            Analizar síntomas
+          </button>
+          <a class="btn btn--secundario" href="#">
+            Enlace con estilo de botón
+          </a>
+        </div>
+      </section>
+
+      <section class="ref__bloque">
+        <h2>Radios y sombras</h2>
+        <div class="ref__cajas">
+          <div class="ref__caja" style="border-radius: var(--r-sm)">
+            <code>--r-sm</code>
+          </div>
+          <div class="ref__caja" style="border-radius: var(--r-md)">
+            <code>--r-md</code>
+          </div>
+          <div class="ref__caja" style="border-radius: var(--r-lg)">
+            <code>--r-lg</code>
+          </div>
+          <div class="ref__caja" style="border-radius: var(--r-xl)">
+            <code>--r-xl</code>
+          </div>
+          <div class="ref__caja ref__caja--sombra">
+            <code>--s-panel</code>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style lang="scss">
+  .ref {
+    @include contenedor;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-12);
+    padding-block: var(--e-12);
+  }
+
+  .ref__cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+  }
+
+  .ref__aviso {
+    align-self: flex-start;
+    padding: var(--e-1) var(--e-3);
+    font-size: var(--t-xs);
+    font-weight: var(--p-medio);
+    color: var(--c-alerta-texto);
+    background: var(--c-alerta-fondo);
+    border: 1px solid var(--c-alerta-borde);
+    border-radius: var(--r-pildora);
+  }
+
+  .ref__entrada {
+    @include texto-lectura;
+
+    color: var(--c-texto-tenue);
+  }
+
+  .ref__bloque {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+    padding-block-start: var(--e-8);
+    border-block-start: 1px solid var(--c-borde);
+  }
+
+  .ref__nota {
+    @include texto-lectura;
+
+    font-size: var(--t-sm);
+    color: var(--c-texto-tenue);
+  }
+
+  .ref__paleta {
+    @include rejilla(4, var(--e-3));
+  }
+
+  .ref__muestra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+    align-items: flex-start;
+  }
+
+  .ref__chip {
+    display: block;
+    block-size: 72px;
+    border-radius: var(--r-sm);
+
+    &--borde {
+      border: 1px solid var(--c-borde);
+    }
+  }
+
+  .ref__nombre {
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+  }
+
+  .ref__escala {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-5);
+  }
+
+  .ref__linea {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+  }
+
+  .ref__etiqueta {
+    font-size: var(--t-xs);
+    color: var(--c-texto-debil);
+  }
+
+  .ref__ejemplo {
+    line-height: var(--i-base);
+
+    &--titulo {
+      font-family: var(--f-titulo);
+      font-weight: var(--p-fuerte);
+      line-height: var(--i-titulo);
+    }
+  }
+
+  .ref__espaciado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+  }
+
+  .ref__barra {
+    display: flex;
+    gap: var(--e-4);
+    align-items: center;
+
+    code {
+      inline-size: 6rem;
+      font-size: var(--t-xs);
+    }
+
+    span {
+      block-size: 14px;
+      background: var(--c-acento);
+      border-radius: var(--r-sm);
+    }
+  }
+
+  .ref__controles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+    align-items: center;
+  }
+
+  .ref__cajas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-4);
+  }
+
+  .ref__caja {
+    display: grid;
+    place-items: center;
+    inline-size: 150px;
+    block-size: 96px;
+    font-size: var(--t-xs);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde);
+
+    &--sombra {
+      border-radius: var(--r-lg);
+      box-shadow: var(--s-panel);
+    }
+  }
+
+  code {
+    padding: 2px 6px;
+    font-family: ui-monospace, monospace;
+    font-size: var(--t-xs);
+    background: var(--c-fondo-alt);
+    border: 1px solid var(--c-borde-suave);
+    border-radius: 6px;
+  }
+
+  // Los botones se definen aquí de forma provisional. En ONI-14 pasan a un
+  // componente base y esta página los consume desde ahí.
+  .btn {
+    @include toque;
+    @include foco;
+
+    display: inline-flex;
+    gap: var(--e-2);
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--e-6);
+    font-size: var(--t-sm);
+    font-weight: var(--p-medio);
+    border-radius: var(--r-pildora);
+    transition: filter var(--m-rapido) ease;
+
+    &:hover:not(:disabled) {
+      filter: brightness(1.05);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    &--primario {
+      color: var(--c-texto-inverso);
+      background: var(--c-acento);
+    }
+
+    &--secundario {
+      color: var(--c-tinta);
+      background: var(--c-fondo);
+      border: 1px solid var(--c-borde);
+    }
+  }
+</style>

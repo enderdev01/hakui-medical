@@ -1,10 +1,134 @@
-// Estilos base. Los tokens del sistema de diseño llegan en ONI-13.
+// Hoja base. Se importa una sola vez desde el layout.
+//
+// Las fuentes se sirven desde el propio dominio: una demostración comercial
+// tiene que abrir bien con el wifi del cliente, y así no hay petición a terceros
+// que explicar en un sitio de salud.
+@use 'fuentes';
+@use 'tokens';
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+// El desplazamiento suave es una comodidad, no un requisito: se apaga con la
+// preferencia de movimiento reducido.
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   margin: 0;
+  background: var(--c-fondo);
+  color: var(--c-tinta);
+  font-family: var(--f-texto);
+  font-size: var(--t-base);
+  line-height: var(--i-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--f-titulo);
+  font-weight: var(--p-fuerte);
+  line-height: var(--i-titulo);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--t-display);
+  line-height: var(--i-apretado);
+}
+
+h2 {
+  font-size: var(--t-h2);
+}
+
+h3 {
+  font-size: var(--t-h3);
+  font-weight: var(--p-semi);
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: var(--c-acento-fuerte);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--c-esmeralda-profundo);
+  }
+
+  @include foco;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  @include foco;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+// Enlace de salto al contenido: primer elemento enfocable de la página.
+.salto-contenido {
+  @include solo-lectores;
+
+  &:focus-visible {
+    position: fixed;
+    top: var(--e-4);
+    left: var(--e-4);
+    z-index: 100;
+    width: auto;
+    height: auto;
+    padding: var(--e-3) var(--e-5);
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    background: var(--c-fondo);
+    border-radius: var(--r-pildora);
+    box-shadow: var(--s-panel);
+  }
+}
+
+// Política transversal de movimiento reducido. Se amplía y se verifica en ONI-32.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
