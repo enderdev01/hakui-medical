@@ -1,0 +1,554 @@
+// Estilos de la isla del asistente.
+//
+// Van en un archivo aparte y no en un componente `.astro` porque una isla React
+// no recibe los estilos con alcance de Astro. Se usan los mismos tokens que el
+// resto del sitio, así que nada se duplica salvo el mecanismo.
+
+.asistente {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--e-6);
+  align-items: start;
+  padding-block-start: var(--e-8);
+
+  @include desde('lg') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.asistente__entrada,
+.resultado {
+  padding: var(--e-6);
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-xl);
+}
+
+.resultado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-5);
+}
+
+.visualmente-oculto {
+  @include solo-lectores;
+}
+
+// ---------------------------------------------------------------- pestañas
+.vias {
+  display: flex;
+  gap: var(--e-1);
+  padding: var(--e-1);
+  background: var(--c-fondo-alt);
+  border-radius: var(--r-pildora);
+}
+
+.vias__boton {
+  @include foco;
+
+  flex: 1;
+  min-height: var(--toque-min);
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-texto-tenue);
+  border-radius: var(--r-pildora);
+  transition:
+    background var(--m-rapido) ease,
+    color var(--m-rapido) ease;
+
+  &--activa {
+    color: var(--c-tinta);
+    background: var(--c-fondo);
+    box-shadow: 0 2px 8px -4px rgb(4 62 48 / 40%);
+  }
+}
+
+// ------------------------------------------------------------------- modos
+.modo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  padding-block-start: var(--e-6);
+}
+
+.modo__titulo {
+  font-size: var(--t-h3);
+}
+
+.modo__ayuda {
+  font-size: var(--t-sm);
+  line-height: var(--i-base);
+  color: var(--c-texto-tenue);
+}
+
+.modo__texto {
+  width: 100%;
+  min-block-size: 8rem;
+  padding: var(--e-4);
+  font-family: var(--f-texto);
+  font-size: var(--t-base);
+  line-height: var(--i-base);
+  color: var(--c-tinta);
+  resize: vertical;
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-md);
+
+  &::placeholder {
+    color: var(--c-texto-debil);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--c-acento);
+    outline-offset: 2px;
+  }
+}
+
+.modo__etiqueta {
+  font-size: var(--t-xs);
+  font-weight: var(--p-medio);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-texto-debil);
+}
+
+.modo__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-3);
+  align-items: center;
+}
+
+.modo__nota {
+  font-size: var(--t-xs);
+  color: var(--c-texto-debil);
+}
+
+.ejemplos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.ejemplos__boton {
+  @include foco;
+
+  width: 100%;
+  min-height: var(--toque-min);
+  padding: var(--e-3) var(--e-4);
+  font-size: var(--t-sm);
+  color: var(--c-texto);
+  text-align: left;
+  background: var(--c-fondo-alt);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-sm);
+  transition: border-color var(--m-rapido) ease;
+
+  &:hover {
+    border-color: var(--c-acento-borde);
+  }
+}
+
+// ------------------------------------------------------------------ espera
+.cargando {
+  display: flex;
+  gap: var(--e-3);
+  align-items: center;
+  padding: var(--e-4) var(--e-5);
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-acento-fuerte);
+  background: var(--c-acento-suave);
+  border: 1px solid var(--c-acento-borde);
+  border-radius: var(--r-md);
+}
+
+.cargando__rueda {
+  inline-size: 18px;
+  block-size: 18px;
+  border: 2.6px solid var(--c-acento-borde);
+  border-block-start-color: var(--c-acento);
+  border-radius: var(--r-pildora);
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ----------------------------------------------------------------- señales
+.senales {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  padding: var(--e-5);
+  background: var(--c-fondo-alt);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-md);
+}
+
+.senales__titulo {
+  font-family: var(--f-texto);
+  font-size: var(--t-xs);
+  font-weight: var(--p-medio);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-texto-tenue);
+}
+
+.senales__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-2);
+}
+
+.senales__item {
+  padding: var(--e-2) var(--e-4);
+  font-size: var(--t-xs);
+  font-weight: var(--p-medio);
+  color: var(--c-acento-fuerte);
+  background: var(--c-acento-suave);
+  border: 1px solid var(--c-acento-borde);
+  border-radius: var(--r-pildora);
+}
+
+.senales__nota {
+  font-size: var(--t-xs);
+  color: var(--c-texto-tenue);
+}
+
+// ------------------------------------------------------------------ avance
+.avance {
+  display: flex;
+  gap: var(--e-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avance__texto {
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-texto-tenue);
+}
+
+.avance__reiniciar {
+  @include foco;
+
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-texto-tenue);
+  text-decoration: underline;
+}
+
+.barra {
+  block-size: 8px;
+  overflow: hidden;
+  background: var(--c-fondo-alt);
+  border-radius: var(--r-pildora);
+}
+
+.barra__relleno {
+  display: block;
+  block-size: 100%;
+  background: var(--c-acento);
+  border-radius: var(--r-pildora);
+  transition: inline-size var(--m-lento) var(--m-curva);
+}
+
+// --------------------------------------------------------------- preguntas
+.pregunta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.pregunta__titulo {
+  padding: 0;
+  font-family: var(--f-titulo);
+  font-size: var(--t-h3);
+  font-weight: var(--p-semi);
+  color: var(--c-tinta);
+}
+
+.pregunta__ayuda {
+  font-size: var(--t-sm);
+  color: var(--c-texto-tenue);
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+  width: 100%;
+}
+
+.opciones__control {
+  @include solo-lectores;
+}
+
+.opciones__etiqueta {
+  display: flex;
+  gap: var(--e-4);
+  align-items: center;
+  min-height: 68px;
+  padding: var(--e-3) var(--e-4);
+  cursor: pointer;
+  background: var(--c-fondo);
+  border: 1px solid var(--c-borde);
+  border-radius: var(--r-md);
+  transition:
+    border-color var(--m-rapido) ease,
+    background var(--m-rapido) ease;
+
+  &:hover {
+    border-color: var(--c-acento-borde);
+  }
+}
+
+.opciones__marca {
+  inline-size: 19px;
+  block-size: 19px;
+  border: 2px solid var(--c-borde);
+  border-radius: var(--r-pildora);
+  transition: border var(--m-rapido) ease;
+}
+
+// El foco vive en el `input`, que está oculto, así que se traslada a la etiqueta.
+.opciones__control:focus-visible + .opciones__etiqueta {
+  outline: 3px solid var(--c-acento);
+  outline-offset: 3px;
+}
+
+.opciones__control:checked + .opciones__etiqueta {
+  background: var(--c-acento-suave);
+  border-color: var(--c-acento);
+
+  .opciones__marca {
+    border-width: 6px;
+    border-color: var(--c-acento);
+  }
+}
+
+.opciones__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opciones__nombre {
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-tinta);
+}
+
+.opciones__detalle {
+  font-size: var(--t-xs);
+  color: var(--c-texto-tenue);
+}
+
+.resumen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  align-items: flex-start;
+}
+
+.resumen__texto {
+  font-size: var(--t-sm);
+  color: var(--c-texto-tenue);
+}
+
+// --------------------------------------------------------------- resultado
+.resultado__vivo {
+  @include solo-lectores;
+}
+
+.resultado__cabecera {
+  display: flex;
+  gap: var(--e-4);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.resultado__eyebrow {
+  font-size: var(--t-xs);
+  font-weight: var(--p-medio);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-texto-tenue);
+}
+
+.resultado__titulo {
+  padding-block: var(--e-1);
+  font-family: var(--f-titulo);
+  font-size: 1.625rem;
+  font-weight: var(--p-fuerte);
+  color: var(--c-tinta);
+}
+
+.resultado__detalle {
+  max-width: 34ch;
+  font-size: var(--t-sm);
+  line-height: var(--i-base);
+  color: var(--c-texto);
+}
+
+.resultado__sello {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  inline-size: 64px;
+  block-size: 64px;
+  color: var(--c-celeste-fuerte);
+  background: var(--c-celeste-suave);
+  border-radius: var(--r-md);
+}
+
+.resultado__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-2);
+}
+
+.resultado__urgencias {
+  margin-block-start: auto;
+  font-size: var(--t-xs);
+  line-height: var(--i-base);
+  color: var(--c-texto-debil);
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--e-2);
+  margin: 0;
+}
+
+.datos__celda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-1);
+  padding: var(--e-3) var(--e-4);
+  background: var(--c-fondo-alt);
+  border-radius: var(--r-sm);
+}
+
+.datos__etiqueta {
+  font-size: var(--t-xs);
+  color: var(--c-texto-tenue);
+}
+
+.datos__valor {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+}
+
+.valor {
+  display: flex;
+  gap: var(--e-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--e-4) var(--e-5);
+  background: var(--c-acento-suave);
+  border: 1px solid var(--c-acento-borde);
+  border-radius: var(--r-md);
+}
+
+.valor__etiqueta {
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  color: var(--c-acento-fuerte);
+}
+
+.valor__nota {
+  font-size: var(--t-xs);
+  color: var(--c-texto);
+}
+
+.valor__precio {
+  font-family: var(--f-titulo);
+  font-size: 1.75rem;
+  font-weight: var(--p-fuerte);
+  color: var(--c-acento-fuerte);
+  font-variant-numeric: tabular-nums;
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-3);
+  align-items: center;
+  padding-block: var(--e-10);
+  text-align: center;
+}
+
+.vacio__titulo {
+  font-size: var(--t-base);
+  font-weight: var(--p-medio);
+  color: var(--c-texto);
+}
+
+.vacio__detalle {
+  max-width: 30ch;
+  font-size: var(--t-sm);
+  color: var(--c-texto-debil);
+}
+
+// ------------------------------------------------------------------ botones
+// La isla no puede usar el componente `Boton.astro`, así que replica su forma.
+// Los valores salen de los mismos tokens: si cambia el sistema, cambian los dos.
+.boton {
+  @include toque;
+  @include foco;
+
+  display: inline-flex;
+  gap: var(--e-2);
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--e-6);
+  font-family: var(--f-texto);
+  font-size: var(--t-sm);
+  font-weight: var(--p-medio);
+  border: 1px solid transparent;
+  border-radius: var(--r-pildora);
+  transition: filter var(--m-rapido) ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &--primario {
+    color: var(--c-texto-inverso);
+    background: var(--c-acento);
+  }
+
+  &--secundario {
+    color: var(--c-tinta);
+    background: var(--c-fondo);
+    border-color: var(--c-borde);
+  }
+
+  &--ancho {
+    width: 100%;
+  }
+}
+
+@include movimiento-reducido {
+  .cargando__rueda,
+  .barra__relleno {
+    animation: none;
+    transition: none;
+  }
+}

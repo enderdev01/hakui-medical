@@ -1,0 +1,19 @@
+---
+import EncabezadoSeccion from '@components/base/EncabezadoSeccion.astro';
+import Seccion from '@components/base/Seccion.astro';
+import Asistente from '@islands/Asistente';
+
+// `client:visible` deja que la landing cargue sin JavaScript y solo hidrata la
+// isla cuando el asistente entra en pantalla. Es el único JavaScript del sitio.
+---
+
+<Seccion id="asistente" fondo="neutro">
+  <EncabezadoSeccion
+    eyebrow="Asistente de citas"
+    titulo="Cuéntanos qué sientes y lo traducimos a una consulta"
+    entrada="Es una orientación automática, no un diagnóstico. Sirve para que no elijas especialidad a ciegas."
+    centrado
+  />
+
+  <Asistente client:visible />
+</Seccion>
