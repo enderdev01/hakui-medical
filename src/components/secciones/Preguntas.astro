@@ -133,6 +133,11 @@ const datosEstructurados = {
 
   // `interpolate-size` permite animar de 0 a `auto`. Donde no esté soportado, la
   // apertura es instantánea, que es un degradado perfectamente aceptable.
+  //
+  // ÚNICA EXCEPCIÓN a la regla de animar solo `transform` y `opacity`: animar
+  // altura fuerza recálculo de diseño, pero es la única manera de animar un
+  // `details`, y escalar con `transform` deformaría el texto. Se acepta porque
+  // ocurre una vez por interacción y no en bucle.
   @supports (interpolate-size: allow-keywords) {
     .pregunta {
       interpolate-size: allow-keywords;

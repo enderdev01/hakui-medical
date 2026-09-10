@@ -412,7 +412,7 @@ function ModoPreguntas({
         aria-valuemax={100}
         aria-label="Avance de las preguntas"
       >
-        <span className="barra__relleno" style={{ inlineSize: `${avance}%` }} />
+        <span className="barra__relleno" style={{ transform: `scaleX(${avance / 100})` }} />
       </div>
 
       {terminado ? (

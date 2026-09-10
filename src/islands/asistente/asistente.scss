@@ -251,10 +251,16 @@
 
 .barra__relleno {
   display: block;
+  inline-size: 100%;
   block-size: 100%;
   background: var(--c-acento);
   border-radius: var(--r-pildora);
-  transition: inline-size var(--m-lento) var(--m-curva);
+
+  // Se escala en lugar de animar el ancho: animar `inline-size` fuerza
+  // recálculo de diseño en cada fotograma. Un rectángulo de color plano no se
+  // distorsiona al escalarlo.
+  transform-origin: left center;
+  transition: transform var(--m-lento) var(--m-curva);
 }
 
 // --------------------------------------------------------------- preguntas
