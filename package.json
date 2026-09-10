@@ -14,8 +14,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run format:check && npm run lint && npm run check && npm run build",
-    "prepare": "simple-git-hooks"
+    "verify": "npm run format:check && npm run lint && npm run check && npm run test && npm run build",
+    "prepare": "simple-git-hooks",
+    "test": "vitest run"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",
@@ -42,7 +43,8 @@
     "sass": "^1.104.0",
     "simple-git-hooks": "^2.14.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.70.0"
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
