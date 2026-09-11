@@ -74,6 +74,9 @@
   --t-lead: 1.125rem;
   --t-base: 1rem;
   --t-sm: 0.9375rem;
+  // Detalles operativos de formularios y salud: legibles en teléfonos angostos
+  // sin elevar el tamaño de etiquetas puramente decorativas.
+  --t-operativo: 0.875rem;
   --t-xs: 0.8125rem;
 
   // Cifras y logotipo. Estaban escritas como literales en cinco componentes;

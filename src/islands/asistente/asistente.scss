@@ -120,7 +120,7 @@
 }
 
 .modo__nota {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto-debil);
 }
 
@@ -215,7 +215,7 @@
 }
 
 .senales__nota {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto-tenue);
 }
 
@@ -234,6 +234,7 @@
 }
 
 .avance__reiniciar {
+  @include toque;
   @include foco;
 
   font-size: var(--t-sm);
@@ -354,7 +355,7 @@
 }
 
 .opciones__detalle {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto-tenue);
 }
 
@@ -433,9 +434,13 @@
 
 .datos {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--e-2);
   margin: 0;
+
+  @include desde('sm') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .datos__celda {
@@ -448,7 +453,7 @@
 }
 
 .datos__etiqueta {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto-tenue);
 }
 
@@ -476,7 +481,7 @@
 }
 
 .valor__nota {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto);
 }
 
@@ -594,7 +599,7 @@
 }
 
 .reservada__codigo {
-  font-size: var(--t-xs);
+  font-size: var(--t-operativo);
   color: var(--c-texto-tenue);
   font-variant-numeric: tabular-nums;
 }

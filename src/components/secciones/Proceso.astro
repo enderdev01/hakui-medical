@@ -32,6 +32,10 @@ import { proceso } from '@data/index';
     padding-block-start: var(--e-8);
 
     @include desde('md') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include desde('lg') {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
