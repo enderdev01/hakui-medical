@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# agent metadata
+.atl/
+
 # dependencies
 node_modules/
 

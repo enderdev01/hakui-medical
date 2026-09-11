@@ -1,0 +1,59 @@
+schema: spec-driven
+
+context: |
+  Project: hakui-medical, a single-page commercial demo for an outpatient clinic.
+  Stack: Astro 7 static output with React 19 for one hydrated island, TypeScript, Sass/SCSS, and npm.
+  Architecture: data-driven Astro page, reusable base and section components, one client island, and pure TypeScript helpers.
+  Conventions: aliases in tsconfig, design tokens and mixins in src/styles, and business content in src/data.
+  Constraints: no backend, browser-only simulated booking, fictional content, and a verified reduced-motion policy.
+  Testing: Vitest 5 unit and build-artifact tests; npm run verify is the workspace quality gate.
+
+strict_tdd: true
+
+testing:
+  workspace_command: 'npm run verify'
+  projects:
+    - path: '.'
+      stack: 'Astro 7, React 19, TypeScript, Sass/SCSS, npm'
+      test_command: 'npm test'
+      runner: 'Vitest 5'
+      test_files: 'src/**/*.test.ts'
+      test_layers:
+        unit: 'Vitest tests for triage, normalization, and simulated booking codes'
+        integration: 'Vitest build-artifact audit for emitted CSS and reduced-motion policy'
+        e2e: null
+      coverage:
+        available: false
+        command: null
+      quality:
+        linter: 'ESLint 10 via npm run lint'
+        type_checker: 'Astro check via npm run check'
+        formatter: 'Prettier via npm run format:check'
+        build: 'Astro build via npm run build'
+
+rules:
+  proposal:
+    - Include a rollback plan for risky changes.
+    - Preserve the no-backend and fictional-content constraints.
+  specs:
+    - Use Given/When/Then for scenarios.
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY).
+    - Write SDD artifacts in English using a neutral, professional register.
+  design:
+    - Document architecture decisions and their rationale.
+    - Identify effects on the Astro/React island boundary and accessibility when relevant.
+  tasks:
+    - Group tasks by phase and use hierarchical numbering.
+    - Keep tasks completable in one session.
+  apply:
+    guidelines:
+      - Follow existing data-driven Astro component and style-token patterns.
+      - Preserve the browser-only demo boundary and reduced-motion policy.
+    tdd: true
+    test_command: 'npm test'
+  verify:
+    test_command: 'npm run verify'
+    build_command: 'npm run build'
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas.
