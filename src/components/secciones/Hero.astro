@@ -159,7 +159,9 @@ const respaldos = [
   .hero__ilustracion {
     position: relative;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: var(--e-3);
+    align-items: stretch;
   }
 
   // ---------- Círculos decorativos ----------
@@ -206,6 +208,13 @@ const respaldos = [
     width: 100%;
     max-width: 620px;
     height: auto;
+  }
+
+  @include desde('sm') {
+    .hero__ilustracion {
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   // ---------- Indicador de disponibilidad ----------
@@ -287,9 +296,11 @@ const respaldos = [
 
   // ---------- Tarjetas flotantes ----------
   .tarjeta {
-    position: absolute;
+    position: static;
     z-index: 2;
     display: flex;
+    box-sizing: border-box;
+    max-inline-size: 100%;
     padding: var(--e-4) var(--e-5);
     background: var(--c-fondo);
     border-radius: var(--r-md);
@@ -298,18 +309,32 @@ const respaldos = [
   }
 
   .tarjeta--cita {
-    inset-block-start: 8%;
-    inset-inline-start: 0;
+    align-self: flex-start;
     gap: var(--e-3);
     align-items: center;
   }
 
   .tarjeta--vitales {
-    inset-block-end: 14%;
-    inset-inline-end: 0;
+    align-self: flex-end;
     flex-direction: column;
     gap: var(--e-2);
     animation-delay: -3s;
+  }
+
+  @include desde('sm') {
+    .tarjeta {
+      position: absolute;
+    }
+
+    .tarjeta--cita {
+      inset-block-start: 8%;
+      inset-inline-start: 0;
+    }
+
+    .tarjeta--vitales {
+      inset-block-end: 14%;
+      inset-inline-end: 0;
+    }
   }
 
   .tarjeta__icono {
@@ -323,7 +348,7 @@ const respaldos = [
   }
 
   .tarjeta__etiqueta {
-    font-size: var(--t-xs);
+    font-size: var(--t-operativo);
     color: var(--c-texto-tenue);
   }
 

@@ -68,10 +68,9 @@ const columnas = [
   }
 
   .lista__fila {
-    display: flex;
-    gap: var(--e-5);
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-2);
     padding: var(--e-4) var(--e-5);
     border-radius: var(--r-sm);
     transition: background var(--m-rapido) ease;
@@ -83,12 +82,19 @@ const columnas = [
     & + & {
       border-block-start: 1px solid var(--c-borde-suave);
     }
+
+    @include desde('sm') {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--e-5);
+      align-items: center;
+    }
   }
 
   .lista__practica {
     display: flex;
     flex-direction: column;
     gap: var(--e-05);
+    min-inline-size: 0;
   }
 
   .lista__nombre {
@@ -97,16 +103,21 @@ const columnas = [
   }
 
   .lista__detalle {
-    font-size: var(--t-xs);
+    font-size: var(--t-operativo);
     color: var(--c-texto-tenue);
   }
 
   .lista__precio {
+    justify-self: start;
     font-family: var(--f-titulo);
     font-size: var(--t-cifra);
     font-weight: var(--p-fuerte);
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+
+    @include desde('sm') {
+      justify-self: end;
+    }
   }
 
   .coberturas {
