@@ -534,7 +534,7 @@ function PanelResultado({ consulta, reserva, onAgendar, onCancelar }: PanelResul
           <dl className="datos">
             <Dato etiqueta="Primer horario libre" valor={consulta.horario} />
             <Dato etiqueta="Duración estimada" valor={formatearDuracion(consulta.duracion)} />
-            <Dato etiqueta="Profesional" valor="[Nombre del profesional]" />
+            <Dato etiqueta="Profesional" valor={consulta.profesional} />
             <Dato etiqueta="Consultorio" valor={consulta.consultorio} />
           </dl>
 

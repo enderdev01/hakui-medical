@@ -62,6 +62,8 @@ export interface Especialidad {
   /** Precio mínimo en la moneda local, sin formatear. */
   desde: number;
   consultorio: string;
+  /** Profesional a cargo, con su colegiatura. */
+  profesional: string;
 }
 
 export interface Arancel {

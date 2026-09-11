@@ -51,17 +51,22 @@ Todo el contenido de negocio vive en `src/data/`. Para cambiar de clínica no ha
 2. Reemplaza la ilustración de `public/img/`.
 3. Ajusta el acento de marca en `src/styles/_tokens.scss`, o pásalo por URL (ONI-40).
 
-### Convención de datos pendientes
+### El contenido es ficticio, no está incompleto
 
-Todo dato real que falta se declara en `src/data/pendiente.ts` y se muestra entre corchetes: `[Dirección de la sede]`, `[+54 11 0000-0000]`.
+No quedan datos por rellenar: nombre, dirección, teléfonos, colegiaturas, registro, precios y testimonios están **inventados** para que la demostración se vea terminada. La clínica no existe.
 
-Para listar lo que queda por completar antes de mostrar la demostración:
+Los precios están en **soles** y corresponden a valores plausibles de clínica privada limeña, no a una conversión de otra moneda.
+
+Dos excepciones deliberadas:
+
+- **El número de emergencias, 106, es real**: es el SAMU del Perú. Un aviso de urgencias con un teléfono inventado es peor que no tener aviso. Al adaptar el sitio a otro país hay que cambiarlo.
+- **Las fechas de la agenda se calculan en el build** a partir del día de hoy. Una fecha fija envejece mal en una demostración que se muestra durante meses: a la semana siguiente la clínica estaría ofreciendo turnos del pasado.
+
+Para volver a marcar un dato como pendiente al adaptar el sitio, está `pendiente()` en `src/data/pendiente.ts`, y la auditoría es:
 
 ```bash
-grep -rn 'pendientes\.' src/data --include='*.ts'
+grep -rn 'pendiente(' src/data --include='*.ts'
 ```
-
-Se busca la referencia y no los corchetes a secas porque los corchetes aparecen también en comentarios y en prosa, y el listado se llena de ruido.
 
 ## Política de movimiento
 
@@ -83,7 +88,7 @@ npm run verify   # construye y después corre la prueba sobre el CSS emitido
 ## Avisos que no se quitan sin decisión explícita
 
 - **El asistente orienta, no diagnostica.** El aviso es visible en la interfaz, no enterrado en el pie.
-- **Los testimonios son simulados.** Presentarlos como reales sin autorización del paciente es un problema, no un detalle.
+- **Los testimonios son inventados, y ahora llevan nombres que parecen reales.** Eso los vuelve más riesgosos, no menos: presentarlos como testimonios genuinos sin autorización del paciente es un problema legal y ético, no un detalle de contenido. Antes de publicar para una clínica real hay que reemplazarlos por testimonios autorizados o retirar la sección.
 - **Reservar no reserva nada.** La reserva se guarda solo en el navegador de quien la hace.
 
 ## Planificación

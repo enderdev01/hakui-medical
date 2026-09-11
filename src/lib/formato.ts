@@ -5,14 +5,14 @@
  * servidor, así que `Intl` nunca viaja al navegador.
  */
 
-const moneda = new Intl.NumberFormat('es-AR', {
+const moneda = new Intl.NumberFormat('es-PE', {
   style: 'currency',
-  currency: 'ARS',
+  currency: 'PEN',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
 
-/** `24500` → `$24.500` */
+/** `70` → `S/ 70` */
 export function precio(valor: number): string {
   return moneda.format(valor);
 }

@@ -7,6 +7,7 @@ export interface ConsultaSugerida {
   duracion: number;
   precio: number;
   consultorio: string;
+  profesional: string;
   horario: string;
 }
 
@@ -68,8 +69,9 @@ export function consultaPara(
       ? 'Chequeo ampliado con revisión de medicación, presión y estudios de rutina.'
       : extra.detalle,
     duracion: esControlIntegral ? 45 : extra.duracion,
-    precio: esControlIntegral ? 29800 : especialidad.desde,
+    precio: esControlIntegral ? 95 : especialidad.desde,
     consultorio: especialidad.consultorio,
+    profesional: especialidad.profesional,
     horario: horariosPorUrgencia[urgencia],
   };
 }
