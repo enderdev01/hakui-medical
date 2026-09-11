@@ -1,4 +1,8 @@
-// Puntos de corte del proyecto. Se amplían en ONI-33.
+// Las funciones globales de Sass desaparecen en Dart Sass 3: hay que pedir el
+// módulo. `@use` tiene que ir antes que cualquier otra cosa del archivo.
+@use 'sass:map';
+
+// Puntos de corte del proyecto.
 $bp: (
   'sm': 480px,
   'md': 768px,
@@ -7,7 +11,7 @@ $bp: (
 );
 
 @mixin desde($nombre) {
-  $valor: map-get($bp, $nombre);
+  $valor: map.get($bp, $nombre);
 
   @if $valor == null {
     @error 'Punto de corte desconocido: #{$nombre}';
